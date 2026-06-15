@@ -1,122 +1,153 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app-container modern-theme">
+      <header className="main-header">
+        <div className="logo-modern">
+          <span className="accent-text">Master</span>CD
         </div>
-        <div>
-          <h1>Get started</h1>
+        <nav className="nav-links">
+          <a href="#" className="active">Trang chủ</a>
+          <a href="#">Sản phẩm</a>
+          <a href="#">Thông tin thanh toán</a>
+          <a href="#">Liên hệ</a>
+        </nav>
+        <div className="header-icons">
+          <button>🔍</button>
+          <button>🛒 <span className="cart-badge">0</span></button>
+          <button className="btn-login">Đăng nhập</button>
+        </div>
+      </header>
+
+      <section className="hero-banner">
+        <div className="hero-content">
+          <span className="badge">Chất lượng 16-bit,44.1kHz</span>
+          <h1>Trải nghiệm âm thanh <br/><span className="accent-text">nguyên bản.</span></h1>
           <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+            Bộ sưu tập đĩa CD vật lý với chất lượng thu âm phòng thu. <br/>
+            Dành riêng cho đôi tai khắt khe nhất.
+          </p>
+          <div className="hero-buttons">
+            <button className="btn-primary">Mua sắm ngay</button>
+            <button className="btn-outline">Xem bộ sưu tập</button>
+          </div>
+        </div>
+        <div className="hero-image">
+           <div className="vinyl-placeholder">
+             <img src="/images/CD.png" alt="Đĩa CD" className="spinning-cd-img" />
+           </div>
+        </div>
+      </section>
+
+<section className="categories-section">
+        <h2>Phân loại định dạng</h2>
+        <div className="category-grid">
+          
+          {/* Danh mục 1 */}
+          <div className="category-card">
+            <img src="/images/CD01.jpg" alt="CD" className="category-img-circle" style={{ objectFit: 'cover' }} />
+            <h3>CD</h3>
+          </div>
+
+          {/* Danh mục 2 */}
+          <div className="category-card">
+            <img src="/images/Vinyl01.jpg" alt="Vinyl (Đĩa than)" className="category-img-circle" style={{ objectFit: 'cover' }} />
+            <h3>Vinyl (Đĩa than)</h3>
+          </div>
+
+          {/* Danh mục 3 */}
+          <div className="category-card">
+            <img src="/images/cassette.jpg" alt="Cassette" className="category-img-circle" style={{ objectFit: 'cover' }} />
+            <h3>Cassette</h3>
+          </div>
+
+          {/* Danh mục 4 */}
+          <div className="category-card">
+            <img src="/images/mayphat.jpg" alt="Phụ kiện" className="category-img-circle" style={{ objectFit: 'cover' }} />
+            <h3>Thiết bị nghe</h3>
+          </div>
+
+        </div>
+      </section>
+
+      <section className="new-release-section">
+        <div className="section-header">
+          <h2>Bản phát hành mới nhất</h2>
+          <a href="#" className="view-all">Xem tất cả ➔</a>
+        </div>
+        <div className="release-horizontal">
+          <img src="/images/album01.jpg" alt="Album 1" className="release-card" style={{ objectFit: 'cover' }} />
+          <img src="/images/Album02.jpg" alt="Album 2" className="release-card" style={{ objectFit: 'cover' }} />
+          <img src="/images/Album03.jpg" alt="Album 3" className="release-card" style={{ objectFit: 'cover' }} />
+          <img src="/images/Album04.jpg" alt="Album 4" className="release-card" style={{ objectFit: 'cover' }} />
+        </div>
+      </section>
+
+      <section className="story-section reverse">
+        <div className="story-text">
+          <span className="subtitle">Triết lý âm thanh</span>
+          <h2>Không nén. Không thỏa hiệp.</h2>
+          <p>
+            Trong thời đại của nhạc số nén và tai nghe bluetooth tiện lợi, chúng tôi giữ lại giá trị của âm thanh thuần khiết. Mỗi chiếc đĩa CD tại đây đều được tinh tuyển để mang lại trải nghiệm độ phân giải cao nhất cho hệ thống âm thanh của bạn.
           </p>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+<img src="/images/quality01.png" alt="Hệ thống loa" className="story-img-placeholder" style={{ objectFit: 'contain' }} />      </section>
 
-      <div className="ticks"></div>
+      <footer className="modern-footer">
+        <div className="footer-grid">
+          <div className="footer-col">
+            <h3><span className="accent-text">Master</span>CD.</h3>
+            <p>Trải nghiệm âm thanh chất lượng cao nguyên bản dành cho người đam mê thực thụ.</p>
+            <div className="social-links-modern">
+              <span>FB</span> <span>IG</span> <span>TW</span>
+            </div>
+          </div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+          <div className="footer-col">
+            <h4>Sản phẩm</h4>
+            <ul>
+              <li><a href="#">Đĩa CD Hi-Res</a></li>
+              <li><a href="#">Đĩa Than (Vinyl)</a></li>
+              <li><a href="#">Băng Cassette</a></li>
+              <li><a href="#">Thiết bị phát</a></li>
+            </ul>
+          </div>
+
+          <div className="footer-col">
+            <h4>Hỗ trợ</h4>
+            <ul>
+              <li><a href="#">Thông tin thanh toán</a></li>
+              <li><a href="#">Hướng dẫn mua hàng</a></li>
+              <li><a href="#">Chính sách đổi trả</a></li>
+            </ul>
+          </div>
+
+          <div className="footer-col">
+            <h4>Dịch vụ</h4>
+            <ul>
+              <li><a href="#">Câu hỏi thường gặp</a></li>
+              <li><a href="#">Theo dõi đơn hàng</a></li>
+              <li><a href="#">Bảo mật thông tin</a></li>
+            </ul>
+          </div>
+
+          <div className="footer-col">
+            <h4>Liên hệ</h4>
+            <ul>
+              <li>Email:<br/><span className="text-gray-info">2400004862@nttu.edu.vn</span></li>
+              <li className="mt-2">Hotline:<br/><span className="text-gray-info">(+84) 0862098350</span></li>
+              <li className="mt-2">Giờ làm việc:<br/><span className="text-gray-info">8:00 AM - 10:00 PM</span></li>
+            </ul>
+          </div>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
+        
+        <div className="footer-bottom">
+           <p>© 2026 Nhóm 3 - Lập trình Web. Mọi quyền được bảo lưu.</p>
         </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      </footer>
+    </div>
+  );
 }
 
-export default App
+export default App;
