@@ -17,9 +17,8 @@ function Home({ setCurrentPage }) {
           
           {/* Đã gắn sự kiện nhảy sang trang sản phẩm */}
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Sản phẩm</a>
-          
           <a href="#" onClick={(e) => e.preventDefault()}>Thông tin thanh toán</a>
-          <a href="#" onClick={(e) => e.preventDefault()}>Liên hệ</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('contact'); }}>Liên hệ</a>  
         </nav>
         <div className="header-icons">
           <button>🔍</button>

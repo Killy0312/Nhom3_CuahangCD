@@ -1,11 +1,10 @@
-.auth-container {
-  min-height: 100vh;
+.auth-main-content {
+  min-height: calc(100vh - 80px);
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #0f1115; /* Nền đồng bộ với trang chủ */
   background-image: radial-gradient(circle at center, #1e222a 0%, #0f1115 100%);
-  font-family: 'Inter', sans-serif;
+  padding: 40px 20px;
 }
 
 .auth-card {
@@ -21,6 +20,12 @@
 .auth-header {
   text-align: center;
   margin-bottom: 30px;
+}
+
+.auth-header h2 {
+  color: #fff;
+  font-size: 26px;
+  font-weight: 800;
 }
 
 .auth-header p {
@@ -61,22 +66,6 @@
 .input-group input:focus {
   border-color: #00e5ff;
   box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.2);
-}
-
-.forgot-password {
-  text-align: right;
-  margin-top: -10px;
-}
-
-.forgot-password a {
-  color: #00e5ff;
-  font-size: 13px;
-  text-decoration: none;
-  transition: 0.3s;
-}
-
-.forgot-password a:hover {
-  text-decoration: underline;
 }
 
 .btn-auth {
