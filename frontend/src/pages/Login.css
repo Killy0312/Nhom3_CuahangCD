@@ -1,0 +1,115 @@
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0f1115; /* Nền đồng bộ với trang chủ */
+  background-image: radial-gradient(circle at center, #1e222a 0%, #0f1115 100%);
+  font-family: 'Inter', sans-serif;
+}
+
+.auth-card {
+  background-color: #14171c;
+  width: 100%;
+  max-width: 400px;
+  padding: 40px;
+  border-radius: 16px;
+  border: 1px solid #1e222a;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.auth-header p {
+  color: #94a3b8;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-group label {
+  color: #e2e8f0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.input-group input {
+  background-color: #1e222a;
+  border: 1px solid #334155;
+  padding: 14px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.input-group input:focus {
+  border-color: #00e5ff;
+  box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.2);
+}
+
+.forgot-password {
+  text-align: right;
+  margin-top: -10px;
+}
+
+.forgot-password a {
+  color: #00e5ff;
+  font-size: 13px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+
+.btn-auth {
+  background-color: #00e5ff;
+  color: #000;
+  border: none;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.btn-auth:hover {
+  background-color: #00b8cc;
+}
+
+.auth-toggle {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.toggle-link {
+  color: #00e5ff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.toggle-link:hover {
+  text-decoration: underline;
+}
