@@ -1,7 +1,6 @@
 import React from 'react';
 import './Contact.css';
-
-function Contact({ setCurrentPage }) {
+function Contact({ setCurrentPage, cart = [] }) {
   return (
     <div className="app-container modern-theme">
       {/* HEADER */}
@@ -17,12 +16,18 @@ function Contact({ setCurrentPage }) {
         <nav className="nav-links">
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('home'); }}>Trang chủ</a>
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Sản phẩm</a>
-          <a href="#" onClick={(e) => e.preventDefault()}>Thông tin thanh toán</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('payment-info'); }}>Thông tin thanh toán</a>
           <a href="#" className="active" onClick={(e) => e.preventDefault()}>Liên hệ</a>
         </nav>
         <div className="header-icons">
-          <button>🔍</button>
-          <button>🛒 <span className="cart-badge">0</span></button>
+          {/* Gắn Alert cho nút Kính lúp */}
+          <button onClick={() => alert('Chức năng tìm kiếm đang được phát triển!')} style={{ cursor: 'pointer' }}>🔍</button>
+          
+          {/* Gắn link và bộ đếm cho Giỏ hàng */}
+          <button onClick={() => setCurrentPage('cart')} style={{ cursor: 'pointer' }}>
+            🛒 <span className="cart-badge">{cart.reduce((total, item) => total + item.quantity, 0)}</span>
+          </button>
+          
           <button onClick={() => setCurrentPage('login')} className="btn-login" style={{ cursor: 'pointer' }}>Đăng nhập</button>
         </div>
       </header>
@@ -33,7 +38,7 @@ function Contact({ setCurrentPage }) {
         <p>Chúng tôi luôn lắng nghe mọi ý kiến đóng góp từ bạn.</p>
       </section>
 
-      {/* NỘI DUNG CHÍNH (Chia 2 cột: Thông tin + Form) */}
+      {/* NỘI DUNG CHÍNH */}
       <main className="contact-main">
         <div className="contact-grid">
           
@@ -71,7 +76,6 @@ function Contact({ setCurrentPage }) {
               </div>
             </div>
 
-            {/* Google Maps Embed tự động trỏ về Đỗ Mười */}
             <div className="map-container">
               <iframe 
                 src="https://maps.google.com/maps?q=331A%20Đỗ%20Mười,%20P.%20An%20Phú%20Đông,%20TP.%20HCM&t=&z=16&ie=UTF8&iwloc=&output=embed" 
@@ -142,7 +146,8 @@ function Contact({ setCurrentPage }) {
           <div className="footer-col">
             <h4>Hỗ trợ</h4>
             <ul>
-              <li><a href="#" onClick={(e) => e.preventDefault()}>Thông tin thanh toán</a></li>
+              {/* Đã sửa lỗi link Footer tại đây */}
+              <li><a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('payment-info'); }}>Thông tin thanh toán</a></li>
               <li><a href="#" onClick={(e) => e.preventDefault()}>Hướng dẫn mua hàng</a></li>
               <li><a href="#" onClick={(e) => e.preventDefault()}>Chính sách đổi trả</a></li>
             </ul>

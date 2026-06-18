@@ -1,7 +1,5 @@
 import '../App.css';
-
-// Nhận hàm setCurrentPage từ App.jsx truyền xuống
-function Home({ setCurrentPage }) {
+function Home({ setCurrentPage, cart = [] }) {
   return (
     <div className="app-container modern-theme">
       <header className="main-header">
@@ -14,15 +12,16 @@ function Home({ setCurrentPage }) {
         </div>
         <nav className="nav-links">
           <a href="#" className="active" onClick={(e) => { e.preventDefault(); setCurrentPage('home'); }}>Trang chủ</a>
-          
-          {/* Đã gắn sự kiện nhảy sang trang sản phẩm */}
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Sản phẩm</a>
-          <a href="#" onClick={(e) => e.preventDefault()}>Thông tin thanh toán</a>
+          
+          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('payment-info'); }}>Thông tin thanh toán</a>
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('contact'); }}>Liên hệ</a>  
         </nav>
         <div className="header-icons">
           <button>🔍</button>
-          <button>🛒 <span className="cart-badge">0</span></button>
+          <button onClick={() => setCurrentPage('cart')} style={{ cursor: 'pointer' }}>
+            🛒 <span className="cart-badge">{cart.reduce((total, item) => total + item.quantity, 0)}</span>
+          </button>
           <button onClick={() => setCurrentPage('login')} className="btn-login" style={{ cursor: 'pointer' }}>
             Đăng nhập
           </button>
@@ -38,7 +37,6 @@ function Home({ setCurrentPage }) {
             Dành riêng cho đôi tai khắt khe nhất.
           </p>
           <div className="hero-buttons">
-            {/* Gắn sự kiện cho 2 nút to đùng ở Banner */}
             <button className="btn-primary" onClick={() => setCurrentPage('products')}>Mua sắm ngay</button>
             <button className="btn-outline" onClick={() => setCurrentPage('products')}>Xem bộ sưu tập</button>
           </div>
@@ -53,7 +51,6 @@ function Home({ setCurrentPage }) {
       <section className="categories-section">
         <h2>Phân loại định dạng</h2>
         <div className="category-grid">
-          {/* Chuyển các thẻ này thành dạng click được để tiện sau này */}
           <div className="category-card" onClick={() => setCurrentPage('products')} style={{ cursor: 'pointer' }}>
             <img src="/images/CD01.jpg" alt="CD" className="category-img-circle" style={{ objectFit: 'cover' }} />
             <h3>CD</h3>
@@ -76,14 +73,13 @@ function Home({ setCurrentPage }) {
       <section className="new-release-section">
         <div className="section-header">
           <h2>Bản phát hành mới nhất</h2>
-          {/* Gắn sự kiện cho nút Xem tất cả */}
           <a href="#" className="view-all" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Xem tất cả ➔</a>
         </div>
         <div className="release-horizontal">
-          <img src="/images/album01.jpg" alt="Album 1" className="release-card" style={{ objectFit: 'cover' }} />
-          <img src="/images/Album02.jpg" alt="Album 2" className="release-card" style={{ objectFit: 'cover' }} />
-          <img src="/images/Album03.jpg" alt="Album 3" className="release-card" style={{ objectFit: 'cover' }} />
-          <img src="/images/Album04.jpg" alt="Album 4" className="release-card" style={{ objectFit: 'cover' }} />
+          <img src="/images/album01.jpg" alt="Album 1" className="release-card" style={{ objectFit: 'cover', cursor: 'pointer' }} onClick={() => setCurrentPage('products')} />
+          <img src="/images/Album02.jpg" alt="Album 2" className="release-card" style={{ objectFit: 'cover', cursor: 'pointer' }} onClick={() => setCurrentPage('products')} />
+          <img src="/images/Album03.jpg" alt="Album 3" className="release-card" style={{ objectFit: 'cover', cursor: 'pointer' }} onClick={() => setCurrentPage('products')} />
+          <img src="/images/Album04.jpg" alt="Album 4" className="release-card" style={{ objectFit: 'cover', cursor: 'pointer' }} onClick={() => setCurrentPage('products')} />
         </div>
       </section>
 
@@ -119,7 +115,8 @@ function Home({ setCurrentPage }) {
           <div className="footer-col">
             <h4>Hỗ trợ</h4>
             <ul>
-              <li><a href="#" onClick={(e) => e.preventDefault()}>Thông tin thanh toán</a></li>
+              {/* ĐÃ FIX LỖI: Gắn lệnh chuyển sang trang Checkout ở Footer */}
+              <li><a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('checkout'); }}>Thông tin thanh toán</a></li>
               <li><a href="#" onClick={(e) => e.preventDefault()}>Hướng dẫn mua hàng</a></li>
               <li><a href="#" onClick={(e) => e.preventDefault()}>Chính sách đổi trả</a></li>
             </ul>

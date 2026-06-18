@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import './Products.css';
 
-function Products({ setCurrentPage }) {
+function Products({ setCurrentPage, addToCart, cart }) {
   const [products] = useState([
-    // ==========================================
     // NHÓM 1: 10 ĐĨA CD (ID: 1 -> 10)
-    // ==========================================
     { id: 1, name: "Lux", artist: "Rosalía", price: "380.000đ", category: "CD", img: "/images/album01.jpg" },
     { id: 2, name: "Music Has The Right to the children", artist: "Boards of Canada", price: "200.000đ", category: "CD", img: "/images/Album03.jpg" },
     { id: 3, name: "Let God Sort Em Out", artist: "Clipse", price: "300.000đ", category: "CD", img: "/images/Album04.jpg" },
@@ -30,7 +28,7 @@ function Products({ setCurrentPage }) {
     { id: 20, name: "Honeybee", artist: "Olivia Rodrigo", price: "400.000đ", category: "Cassette", img: "/images/CS4.webp" },
     // NHÓM 4: 5 THIẾT BỊ NGHE (ID: 21 -> 25)
     { id: 21, name: "Sony Walkman Retro", artist: "Sony", price: "1.200.000đ", category: "Thiết bị nghe", img: "/images/mayphat.jpg" },
-    { id: 22, name: "Máy pháy băng casset Bauhaus Staircase", artist: "OMD ", price: "1.500.000đ", category: "Thiết bị nghe", img: "/images/TB02.png" },
+    { id: 22, name: "Máy phát băng casset Bauhaus Staircase", artist: "OMD ", price: "1.500.000đ", category: "Thiết bị nghe", img: "/images/TB02.png" },
     { id: 23, name: "Cyrus CD40", artist: "Cyrys", price: "35.500.000đ", category: "Thiết bị nghe", img: "/images/CD03.avif" },
     { id: 24, name: "Cyrus CDi", artist: "Cyrus", price: "27.500.000đ", category: "Thiết bị nghe", img: "/images/TB03.webp" },
     { id: 25, name: "iFi Go Link Max", artist: "iFi", price: "5.500.000đ", category: "Thiết bị nghe", img: "/images/TB04.webp" },
@@ -67,12 +65,14 @@ function Products({ setCurrentPage }) {
         <nav className="nav-links">
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('home'); }}>Trang chủ</a>
           <a href="#" className="active" onClick={(e) => e.preventDefault()}>Sản phẩm</a>
-          <a href="#" onClick={(e) => e.preventDefault()}>Thông tin thanh toán</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('payment-info'); }}>Thông tin thanh toán</a>
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('contact'); }}>Liên hệ</a>  
         </nav>
         <div className="header-icons">
           <button>🔍</button>
-          <button>🛒 <span className="cart-badge">0</span></button>
+          <button onClick={() => setCurrentPage('cart')} style={{ cursor: 'pointer' }}>
+            🛒 <span className="cart-badge">{cart.reduce((total, item) => total + item.quantity, 0)}</span>
+          </button>
           <button onClick={() => setCurrentPage('login')} className="btn-login" style={{ cursor: 'pointer' }}>Đăng nhập</button>
         </div>
       </header>
@@ -116,12 +116,18 @@ function Products({ setCurrentPage }) {
                 />
                 <span className="product-category-tag">{product.category}</span>
                 <div className="product-overlay">
-                  <button className="btn-add-to-cart" onClick={(e) => { e.stopPropagation(); alert('Đã thêm vào giỏ hàng!'); }}>
+                  <button 
+                    className="btn-add-to-cart" 
+                    onClick={(e) => { 
+                      e.stopPropagation(); 
+                      addToCart(product); 
+                      alert(`Đã thêm ${product.name} vào giỏ hàng!`); 
+                    }}
+                  >
                     Thêm vào giỏ
                   </button>
                 </div>
               </div>
-
               <div className="product-info">
                 <h3 
                   className="product-title" 
