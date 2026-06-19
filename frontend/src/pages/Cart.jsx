@@ -1,17 +1,16 @@
 import React from 'react';
 import './Cart.css';
+import Footer from '../components/Footer.jsx'; 
 
 function Cart({ setCurrentPage, cart, updateCartItem }) {
   const parsePrice = (priceStr) => parseInt(priceStr.replace(/\D/g, '')) || 0;
   
   const formatPrice = (num) => num.toLocaleString('vi-VN') + 'đ';
 
-  // Tính tổng tiền toàn bộ giỏ hàng
   const totalPrice = cart.reduce((total, item) => total + (parsePrice(item.price) * item.quantity), 0);
 
   return (
     <div className="app-container modern-theme">
-      {/* HEADER */}
       <header className="main-header">
         <div className="logo-modern" onClick={() => setCurrentPage('home')} style={{ cursor: 'pointer' }}>
           <span className="accent-text">Master</span>CD
@@ -23,10 +22,11 @@ function Cart({ setCurrentPage, cart, updateCartItem }) {
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('contact'); }}>Liên hệ</a>
         </nav>
         <div className="header-icons">
-          <button>🔍</button>
-          <button className="active-icon">
+          <button onClick={() => alert('Chức năng tìm kiếm đang được phát triển!')} style={{ cursor: 'pointer' }}>🔍</button>
+          <button className="active-icon" style={{ cursor: 'pointer' }}>
             🛒 <span className="cart-badge">{cart.reduce((total, item) => total + item.quantity, 0)}</span>
           </button>
+          <button onClick={() => setCurrentPage('login')} className="btn-login" style={{ cursor: 'pointer' }}>Đăng nhập</button>
         </div>
       </header>
 
@@ -108,6 +108,8 @@ function Cart({ setCurrentPage, cart, updateCartItem }) {
           </div>
         )}
       </main>
+
+      <Footer setCurrentPage={setCurrentPage} />
     </div>
   );
 }

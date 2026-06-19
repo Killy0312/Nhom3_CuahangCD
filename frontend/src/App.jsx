@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
 import Products from './pages/Products.jsx';
@@ -9,8 +9,29 @@ import PaymentInfo from './pages/PaymentInfo.jsx';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
-  
   const [cart, setCart] = useState([]);
+
+  useEffect(() => {
+    window.history.replaceState({ page: 'home' }, '', '/');
+
+    const handlePopState = (event) => {
+      if (event.state && event.state.page) {
+        setCurrentPage(event.state.page); 
+      } else {
+        setCurrentPage('home'); 
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const navigateTo = (page) => {
+    if (currentPage !== page) {
+      setCurrentPage(page);
+      window.history.pushState({ page: page }, '', page === 'home' ? '/' : `/#${page}`);
+    }
+  };
 
   const addToCart = (product) => {
     setCart((prevCart) => {
@@ -38,24 +59,24 @@ function App() {
 
   return (
     <>
-      {currentPage === 'home' && <Home setCurrentPage={setCurrentPage} cart={cart} />}
+      {currentPage === 'home' && <Home setCurrentPage={navigateTo} cart={cart} />}
       
-      {currentPage === 'login' && <Login setCurrentPage={setCurrentPage} />}
+      {currentPage === 'login' && <Login setCurrentPage={navigateTo} cart={cart} />}
       
-      {currentPage === 'contact' && <Contact setCurrentPage={setCurrentPage} cart={cart} />}
+      {currentPage === 'contact' && <Contact setCurrentPage={navigateTo} cart={cart} />}
       
-      {currentPage === 'payment-info' && <PaymentInfo setCurrentPage={setCurrentPage} cart={cart} />}
+      {currentPage === 'payment-info' && <PaymentInfo setCurrentPage={navigateTo} cart={cart} />}
       
       {currentPage === 'products' && (
-        <Products setCurrentPage={setCurrentPage} addToCart={addToCart} cart={cart} />
+        <Products setCurrentPage={navigateTo} addToCart={addToCart} cart={cart} />
       )}
 
       {currentPage === 'cart' && (
-        <Cart setCurrentPage={setCurrentPage} cart={cart} updateCartItem={updateCartItem} />
+        <Cart setCurrentPage={navigateTo} cart={cart} updateCartItem={updateCartItem} />
       )}
 
       {currentPage === 'checkout' && (
-        <Checkout setCurrentPage={setCurrentPage} cart={cart} clearCart={clearCart} />
+        <Checkout setCurrentPage={navigateTo} cart={cart} clearCart={clearCart} />
       )}
     </>
   );

@@ -1,5 +1,6 @@
 import React from 'react';
 import './PaymentInfo.css';
+import Footer from '../components/Footer.jsx'; 
 
 function PaymentInfo({ setCurrentPage, cart = [] }) {
   return (
@@ -16,7 +17,8 @@ function PaymentInfo({ setCurrentPage, cart = [] }) {
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('contact'); }}>Liên hệ</a>
         </nav>
         <div className="header-icons">
-          <button>🔍</button>
+          {/* Đã thêm cảnh báo cho Kính lúp */}
+          <button onClick={() => alert('Chức năng tìm kiếm đang được phát triển!')} style={{ cursor: 'pointer' }}>🔍</button>
           <button onClick={() => setCurrentPage('cart')} style={{ cursor: 'pointer' }}>
             🛒 <span className="cart-badge">{cart.reduce((total, item) => total + item.quantity, 0)}</span>
           </button>
@@ -76,26 +78,8 @@ function PaymentInfo({ setCurrentPage, cart = [] }) {
         </div>
       </main>
 
-      {/* FOOTER */}
-      <footer className="modern-footer">
-        <div className="footer-grid">
-          <div className="footer-col">
-            <h3><span className="accent-text">Master</span>CD.</h3>
-            <p>Trải nghiệm âm thanh chất lượng cao nguyên bản dành cho người đam mê thực thụ.</p>
-          </div>
-          <div className="footer-col">
-            <h4>Liên hệ</h4>
-            <ul>
-              <li>Email:<br/><span className="text-gray-info">2400004862@nttu.edu.vn</span></li>
-              <li className="mt-2">Hotline:<br/><span className="text-gray-info">(+84) 0862098350</span></li>
-              <li className="mt-2">Địa chỉ:<br/><span className="text-gray-info">331A Đỗ Mười, P. An Phú Đông, TP. HCM</span></li>
-            </ul>
-          </div>
-        </div>
-        <div className="footer-bottom">
-           <p>© 2026 Nhóm 3 - Lập trình Web. Mọi quyền được bảo lưu.</p>
-        </div>
-      </footer>
+      <Footer setCurrentPage={setCurrentPage} />
+      
     </div>
   );
 }

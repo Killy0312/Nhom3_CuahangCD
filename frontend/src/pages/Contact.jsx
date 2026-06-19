@@ -1,9 +1,10 @@
 import React from 'react';
 import './Contact.css';
+import Footer from '../components/Footer.jsx'; 
+
 function Contact({ setCurrentPage, cart = [] }) {
   return (
     <div className="app-container modern-theme">
-      {/* HEADER */}
       <header className="main-header">
         <div 
           className="logo-modern" 
@@ -20,10 +21,8 @@ function Contact({ setCurrentPage, cart = [] }) {
           <a href="#" className="active" onClick={(e) => e.preventDefault()}>Liên hệ</a>
         </nav>
         <div className="header-icons">
-          {/* Gắn Alert cho nút Kính lúp */}
           <button onClick={() => alert('Chức năng tìm kiếm đang được phát triển!')} style={{ cursor: 'pointer' }}>🔍</button>
           
-          {/* Gắn link và bộ đếm cho Giỏ hàng */}
           <button onClick={() => setCurrentPage('cart')} style={{ cursor: 'pointer' }}>
             🛒 <span className="cart-badge">{cart.reduce((total, item) => total + item.quantity, 0)}</span>
           </button>
@@ -32,17 +31,14 @@ function Contact({ setCurrentPage, cart = [] }) {
         </div>
       </header>
 
-      {/* BANNER LIÊN HỆ */}
       <section className="contact-banner">
         <h1>Kết nối với <span className="accent-text">MasterCD</span></h1>
         <p>Chúng tôi luôn lắng nghe mọi ý kiến đóng góp từ bạn.</p>
       </section>
 
-      {/* NỘI DUNG CHÍNH */}
       <main className="contact-main">
         <div className="contact-grid">
           
-          {/* CỘT TRÁI: Thông tin & Bản đồ */}
           <div className="contact-info-side">
             <h2>Thông tin cửa hàng</h2>
             <div className="info-list">
@@ -120,59 +116,10 @@ function Contact({ setCurrentPage, cart = [] }) {
               <button type="submit" className="btn-submit-contact">Gửi lời nhắn</button>
             </form>
           </div>
-
         </div>
       </main>
 
-      {/* FOOTER */}
-      <footer className="modern-footer">
-        <div className="footer-grid">
-          <div className="footer-col">
-            <h3><span className="accent-text">Master</span>CD.</h3>
-            <p>Trải nghiệm âm thanh chất lượng cao nguyên bản dành cho người đam mê thực thụ.</p>
-            <div className="social-links-modern">
-              <span>FB</span> <span>IG</span> <span>TW</span>
-            </div>
-          </div>
-          <div className="footer-col">
-            <h4>Sản phẩm</h4>
-            <ul>
-              <li><a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Đĩa CD Hi-Res</a></li>
-              <li><a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Đĩa Than (Vinyl)</a></li>
-              <li><a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Băng Cassette</a></li>
-              <li><a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Thiết bị phát</a></li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>Hỗ trợ</h4>
-            <ul>
-              {/* Đã sửa lỗi link Footer tại đây */}
-              <li><a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('payment-info'); }}>Thông tin thanh toán</a></li>
-              <li><a href="#" onClick={(e) => e.preventDefault()}>Hướng dẫn mua hàng</a></li>
-              <li><a href="#" onClick={(e) => e.preventDefault()}>Chính sách đổi trả</a></li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>Dịch vụ</h4>
-            <ul>
-              <li><a href="#" onClick={(e) => e.preventDefault()}>Câu hỏi thường gặp</a></li>
-              <li><a href="#" onClick={(e) => e.preventDefault()}>Theo dõi đơn hàng</a></li>
-              <li><a href="#" onClick={(e) => e.preventDefault()}>Bảo mật thông tin</a></li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>Liên hệ</h4>
-            <ul>
-              <li>Email:<br/><span className="text-gray-info">2400004862@nttu.edu.vn</span></li>
-              <li className="mt-2">Hotline:<br/><span className="text-gray-info">(+84) 0862098350</span></li>
-              <li className="mt-2">Giờ làm việc:<br/><span className="text-gray-info">8:00 AM - 10:00 PM</span></li>
-            </ul>
-          </div>
-        </div>
-        <div className="footer-bottom">
-           <p>© 2026 Nhóm 3 - Lập trình Web. Mọi quyền được bảo lưu.</p>
-        </div>
-      </footer>
+      <Footer setCurrentPage={setCurrentPage} />
     </div>
   );
 }

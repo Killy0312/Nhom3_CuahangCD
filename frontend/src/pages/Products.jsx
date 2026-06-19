@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Products.css';
+import Footer from '../components/Footer.jsx'; 
 
 function Products({ setCurrentPage, addToCart, cart }) {
   const [products] = useState([
@@ -37,7 +38,6 @@ function Products({ setCurrentPage, addToCart, cart }) {
   const [activeCategory, setActiveCategory] = useState('Tất cả');
   const [activePage, setActivePage] = useState(1);
   
-  // Vẫn giữ hiển thị 12 sản phẩm/trang để duy trì lưới 3 hàng 4 cột chuẩn đẹp
   const itemsPerPage = 12;
 
   const handleCategoryChange = (cat) => {
@@ -69,7 +69,8 @@ function Products({ setCurrentPage, addToCart, cart }) {
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('contact'); }}>Liên hệ</a>  
         </nav>
         <div className="header-icons">
-          <button>🔍</button>
+          {/* Đã thêm cảnh báo cho Kính lúp */}
+          <button onClick={() => alert('Chức năng tìm kiếm đang được phát triển!')} style={{ cursor: 'pointer' }}>🔍</button>
           <button onClick={() => setCurrentPage('cart')} style={{ cursor: 'pointer' }}>
             🛒 <span className="cart-badge">{cart.reduce((total, item) => total + item.quantity, 0)}</span>
           </button>
@@ -187,54 +188,9 @@ function Products({ setCurrentPage, addToCart, cart }) {
         )}
       </main>
 
-      {/* FOOTER */}
-      <footer className="modern-footer">
-        <div className="footer-grid">
-          <div className="footer-col">
-            <h3><span className="accent-text">Master</span>CD.</h3>
-            <p>Trải nghiệm âm thanh chất lượng cao nguyên bản dành cho người đam mê thực thụ.</p>
-            <div className="social-links-modern">
-              <span>FB</span> <span>IG</span> <span>TW</span>
-            </div>
-          </div>
-          <div className="footer-col">
-            <h4>Sản phẩm</h4>
-            <ul>
-              <li><a href="#">Đĩa CD Hi-Res</a></li>
-              <li><a href="#">Đĩa Than (Vinyl)</a></li>
-              <li><a href="#">Băng Cassette</a></li>
-              <li><a href="#">Thiết bị phát</a></li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>Hỗ trợ</h4>
-            <ul>
-              <li><a href="#">Thông tin thanh toán</a></li>
-              <li><a href="#">Hướng dẫn mua hàng</a></li>
-              <li><a href="#">Chính sách đổi trả</a></li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>Dịch vụ</h4>
-            <ul>
-              <li><a href="#">Câu hỏi thường gặp</a></li>
-              <li><a href="#">Theo dõi đơn hàng</a></li>
-              <li><a href="#">Bảo mật thông tin</a></li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>Liên hệ</h4>
-            <ul>
-              <li>Email:<br/><span className="text-gray-info">2400004862@nttu.edu.vn</span></li>
-              <li className="mt-2">Hotline:<br/><span className="text-gray-info">(+84) 0862098350</span></li>
-              <li className="mt-2">Giờ làm việc:<br/><span className="text-gray-info">8:00 AM - 10:00 PM</span></li>
-            </ul>
-          </div>
-        </div>
-        <div className="footer-bottom">
-           <p>© 2026 Nhóm 3 - Lập trình Web. Mọi quyền được bảo lưu.</p>
-        </div>
-      </footer>
+      {/* Gọi Component Footer dùng chung */}
+      <Footer setCurrentPage={setCurrentPage} />
+      
     </div>
   );
 }

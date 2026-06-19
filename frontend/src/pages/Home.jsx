@@ -1,4 +1,6 @@
 import '../App.css';
+import Footer from '../components/Footer.jsx';
+
 function Home({ setCurrentPage, cart = [] }) {
   return (
     <div className="app-container modern-theme">
@@ -13,12 +15,13 @@ function Home({ setCurrentPage, cart = [] }) {
         <nav className="nav-links">
           <a href="#" className="active" onClick={(e) => { e.preventDefault(); setCurrentPage('home'); }}>Trang chủ</a>
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Sản phẩm</a>
-          
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('payment-info'); }}>Thông tin thanh toán</a>
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('contact'); }}>Liên hệ</a>  
         </nav>
         <div className="header-icons">
-          <button>🔍</button>
+          {/* Đã thêm thông báo (Alert) cho nút Kính lúp */}
+          <button onClick={() => alert('Chức năng tìm kiếm đang được phát triển!')} style={{ cursor: 'pointer' }}>🔍</button>
+          
           <button onClick={() => setCurrentPage('cart')} style={{ cursor: 'pointer' }}>
             🛒 <span className="cart-badge">{cart.reduce((total, item) => total + item.quantity, 0)}</span>
           </button>
@@ -94,54 +97,9 @@ function Home({ setCurrentPage, cart = [] }) {
         <img src="/images/quality01.png" alt="Hệ thống loa" className="story-img-placeholder" style={{ objectFit: 'contain' }} />
       </section>
 
-      <footer className="modern-footer">
-        <div className="footer-grid">
-          <div className="footer-col">
-            <h3><span className="accent-text">Master</span>CD.</h3>
-            <p>Trải nghiệm âm thanh chất lượng cao nguyên bản dành cho người đam mê thực thụ.</p>
-            <div className="social-links-modern">
-              <span>FB</span> <span>IG</span> <span>TW</span>
-            </div>
-          </div>
-          <div className="footer-col">
-            <h4>Sản phẩm</h4>
-            <ul>
-              <li><a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Đĩa CD Hi-Res</a></li>
-              <li><a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Đĩa Than (Vinyl)</a></li>
-              <li><a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Băng Cassette</a></li>
-              <li><a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Thiết bị phát</a></li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>Hỗ trợ</h4>
-            <ul>
-              {/* ĐÃ FIX LỖI: Gắn lệnh chuyển sang trang Checkout ở Footer */}
-              <li><a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('checkout'); }}>Thông tin thanh toán</a></li>
-              <li><a href="#" onClick={(e) => e.preventDefault()}>Hướng dẫn mua hàng</a></li>
-              <li><a href="#" onClick={(e) => e.preventDefault()}>Chính sách đổi trả</a></li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>Dịch vụ</h4>
-            <ul>
-              <li><a href="#" onClick={(e) => e.preventDefault()}>Câu hỏi thường gặp</a></li>
-              <li><a href="#" onClick={(e) => e.preventDefault()}>Theo dõi đơn hàng</a></li>
-              <li><a href="#" onClick={(e) => e.preventDefault()}>Bảo mật thông tin</a></li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>Liên hệ</h4>
-            <ul>
-              <li>Email:<br/><span className="text-gray-info">2400004862@nttu.edu.vn</span></li>
-              <li className="mt-2">Hotline:<br/><span className="text-gray-info">(+84) 0862098350</span></li>
-              <li className="mt-2">Giờ làm việc:<br/><span className="text-gray-info">8:00 AM - 10:00 PM</span></li>
-            </ul>
-          </div>
-        </div>
-        <div className="footer-bottom">
-           <p>© 2026 Nhóm 3 - Lập trình Web. Mọi quyền được bảo lưu.</p>
-        </div>
-      </footer>
+      {/* Đã xóa toàn bộ HTML Footer cũ và gọi Component Footer mới ra dùng */}
+      <Footer setCurrentPage={setCurrentPage} />
+      
     </div>
   );
 }

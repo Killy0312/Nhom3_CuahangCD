@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import './Login.css';
+import Footer from '../components/Footer.jsx'; 
 
-function Login({ setCurrentPage }) {
+function Login({ setCurrentPage, cart = [] }) {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
     <div className="app-container modern-theme">
+      {/* HEADER ĐỒNG BỘ */}
       <header className="main-header">
         <div 
           className="logo-modern" 
@@ -17,12 +19,17 @@ function Login({ setCurrentPage }) {
         <nav className="nav-links">
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('home'); }}>Trang chủ</a>
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Sản phẩm</a>
-          <a href="#" onClick={(e) => e.preventDefault()}>Thông tin thanh toán</a>
+          {/* Đã sửa link Thông tin thanh toán */}
+          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('payment-info'); }}>Thông tin thanh toán</a>
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('contact'); }}>Liên hệ</a>
         </nav>
         <div className="header-icons">
-          <button>🔍</button>
-          <button>🛒 <span className="cart-badge">0</span></button>
+          <button onClick={() => alert('Chức năng tìm kiếm đang được phát triển!')} style={{ cursor: 'pointer' }}>🔍</button>
+          
+          <button onClick={() => setCurrentPage('cart')} style={{ cursor: 'pointer' }}>
+            🛒 <span className="cart-badge">{cart.reduce((total, item) => total + item.quantity, 0)}</span>
+          </button>
+          
           <button onClick={() => setCurrentPage('login')} className="btn-login" style={{ cursor: 'pointer', border: '1px solid #00e5ff', color: '#00e5ff' }}>
             Đăng nhập
           </button>
@@ -69,6 +76,9 @@ function Login({ setCurrentPage }) {
           </div>
         </div>
       </main>
+
+      {/* GỌI COMPONENT FOOTER DÙNG CHUNG */}
+      <Footer setCurrentPage={setCurrentPage} />
     </div>
   );
 }
