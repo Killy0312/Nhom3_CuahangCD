@@ -28,14 +28,18 @@ function Footer({ setCurrentPage }) {
             <li><a href="#" onClick={(e) => e.preventDefault()}>Chính sách đổi trả</a></li>
           </ul>
         </div>
+        
         <div className="footer-col">
           <h4>Dịch vụ</h4>
           <ul>
-            <li><a href="#" onClick={(e) => e.preventDefault()}>Câu hỏi thường gặp</a></li>
-            <li><a href="#" onClick={(e) => e.preventDefault()}>Theo dõi đơn hàng</a></li>
-            <li><a href="#" onClick={(e) => e.preventDefault()}>Bảo mật thông tin</a></li>
+            <li>
+              <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('faqs'); }}>
+                Câu hỏi thường gặp
+              </a>
+            </li>
           </ul>
         </div>
+        
         <div className="footer-col">
           <h4>Liên hệ</h4>
           <ul>

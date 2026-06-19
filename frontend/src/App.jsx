@@ -5,7 +5,8 @@ import Products from './pages/Products.jsx';
 import Contact from './pages/Contact.jsx';
 import Cart from './pages/Cart.jsx';
 import Checkout from './pages/Checkout.jsx';
-import PaymentInfo from './pages/PaymentInfo.jsx'; 
+import PaymentInfo from './pages/PaymentInfo.jsx';
+import Faqs from './pages/Faqs.jsx';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -16,9 +17,9 @@ function App() {
 
     const handlePopState = (event) => {
       if (event.state && event.state.page) {
-        setCurrentPage(event.state.page); 
+        setCurrentPage(event.state.page);
       } else {
-        setCurrentPage('home'); 
+        setCurrentPage('home');
       }
     };
 
@@ -37,7 +38,7 @@ function App() {
     setCart((prevCart) => {
       const existingItem = prevCart.find(item => item.id === product.id);
       if (existingItem) {
-        return prevCart.map(item => 
+        return prevCart.map(item =>
           item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
@@ -49,7 +50,7 @@ function App() {
     if (newQuantity <= 0) {
       setCart(prevCart => prevCart.filter(item => item.id !== id));
     } else {
-      setCart(prevCart => prevCart.map(item => 
+      setCart(prevCart => prevCart.map(item =>
         item.id === id ? { ...item, quantity: newQuantity } : item
       ));
     }
@@ -60,24 +61,13 @@ function App() {
   return (
     <>
       {currentPage === 'home' && <Home setCurrentPage={navigateTo} cart={cart} />}
-      
       {currentPage === 'login' && <Login setCurrentPage={navigateTo} cart={cart} />}
-      
       {currentPage === 'contact' && <Contact setCurrentPage={navigateTo} cart={cart} />}
-      
       {currentPage === 'payment-info' && <PaymentInfo setCurrentPage={navigateTo} cart={cart} />}
-      
-      {currentPage === 'products' && (
-        <Products setCurrentPage={navigateTo} addToCart={addToCart} cart={cart} />
-      )}
-
-      {currentPage === 'cart' && (
-        <Cart setCurrentPage={navigateTo} cart={cart} updateCartItem={updateCartItem} />
-      )}
-
-      {currentPage === 'checkout' && (
-        <Checkout setCurrentPage={navigateTo} cart={cart} clearCart={clearCart} />
-      )}
+      {currentPage === 'faqs' && <Faqs setCurrentPage={navigateTo} cart={cart} />}
+      {currentPage === 'products' && <Products setCurrentPage={navigateTo} addToCart={addToCart} cart={cart} />}
+      {currentPage === 'cart' && <Cart setCurrentPage={navigateTo} cart={cart} updateCartItem={updateCartItem} />}
+      {currentPage === 'checkout' && <Checkout setCurrentPage={navigateTo} cart={cart} clearCart={clearCart} />}
     </>
   );
 }
