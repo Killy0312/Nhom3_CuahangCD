@@ -1,0 +1,222 @@
+.product-detail-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 30px 100px 30px;
+  color: #fff;
+}
+
+.btn-back {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 30px;
+  transition: color 0.3s;
+}
+
+.btn-back:hover {
+  color: #00e5ff;
+}
+
+.detail-layout {
+  display: flex;
+  gap: 60px;
+  align-items: flex-start;
+}
+
+.detail-image-section {
+  flex: 1;
+}
+
+.detail-main-img {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  border: 1px solid #1e222a;
+}
+
+.detail-info-section {
+  flex: 1.2;
+}
+
+.detail-category {
+  display: inline-block;
+  background-color: #1e222a;
+  color: #00e5ff;
+  padding: 6px 15px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.detail-title {
+  font-size: 42px;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.detail-artist {
+  font-size: 20px;
+  color: #94a3b8;
+  margin-bottom: 30px;
+}
+
+.detail-price-box {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #1e222a;
+}
+
+.detail-price {
+  font-size: 32px;
+  color: #00e5ff;
+  font-weight: 900;
+}
+
+.detail-status {
+  font-size: 16px;
+  color: #94a3b8;
+}
+
+.text-green {
+  color: #10b981;
+  font-weight: bold;
+}
+
+.detail-description {
+  color: #cbd5e1;
+  line-height: 1.8;
+  font-size: 16px;
+  margin-bottom: 40px;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 50px;
+}
+
+.btn-add-to-cart-large {
+  flex: 1;
+  padding: 18px;
+  background: transparent;
+  border: 2px solid #00e5ff;
+  color: #00e5ff;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-add-to-cart-large:hover {
+  background: rgba(0, 229, 255, 0.1);
+}
+
+.btn-buy-now {
+  flex: 1;
+  padding: 18px;
+  background: #00e5ff;
+  border: none;
+  color: #000;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-buy-now:hover {
+  background: #00b8cc;
+  box-shadow: 0 10px 20px rgba(0,229,255,0.2);
+}
+
+/* --- DANH SÁCH BÀI HÁT --- */
+.tracklist-container {
+  margin-top: 40px;
+  background-color: #14171c;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #1e222a;
+}
+
+.tracklist-header {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #334155;
+  color: #94a3b8;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.th-hash { width: 30px; text-align: center; }
+.th-title { flex: 1; padding-left: 15px; }
+.th-time { width: 40px; text-align: right; }
+
+.tracklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.track-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #1e222a;
+  color: #94a3b8;
+  transition: background-color 0.2s;
+  border-radius: 6px;
+}
+
+.track-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.track-item:last-child {
+  border-bottom: none;
+}
+
+.track-left {
+  display: flex;
+  align-items: center;
+}
+
+.track-number {
+  width: 30px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.track-info {
+  display: flex;
+  flex-direction: column;
+  padding-left: 15px;
+  gap: 4px;
+}
+
+.track-name {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.track-artist {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.track-duration {
+  width: 40px;
+  text-align: right;
+  font-size: 14px;
+}

@@ -108,7 +108,7 @@ function Products({ setCurrentPage, addToCart, cart }) {
               <div 
                 className="product-img-wrapper" 
                 style={{ cursor: 'pointer' }}
-                onClick={() => alert(`Bấm vào đây sẽ mở trang chi tiết của sản phẩm: ${product.name}`)}
+                onClick={() => setCurrentPage('product-detail', product)}
               >
                 <img 
                   src={product.img} 
@@ -130,10 +130,10 @@ function Products({ setCurrentPage, addToCart, cart }) {
                 </div>
               </div>
               <div className="product-info">
-                <h3 
+              <h3 
                   className="product-title" 
                   style={{ cursor: 'pointer' }}
-                  onClick={() => alert(`Bấm vào tên cũng mở trang chi tiết của: ${product.name}`)}
+                  onClick={() => setCurrentPage('product-detail', product)}
                 >
                   {product.name}
                 </h3>
