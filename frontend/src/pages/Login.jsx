@@ -4,10 +4,50 @@ import Footer from '../components/Footer.jsx';
 
 function Login({ setCurrentPage, cart = [] }) {
   const [isLogin, setIsLogin] = useState(true);
+  
+  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); 
+    
+    const url = isLogin 
+      ? 'http://localhost:5000/api/auth/login' 
+      : 'http://localhost:5000/api/auth/register';
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      
+      const data = await response.json();
+
+      if (response.ok) {
+        if (isLogin) {
+          alert("🎉 Đăng nhập thành công!");
+          localStorage.setItem('token', data.token); 
+          localStorage.setItem('userName', data.user.name); 
+          // Đăng nhập xong đưa người dùng về trang chủ
+          setCurrentPage('home'); 
+        } else {
+          alert("🎉 Đăng ký thành công! Vui lòng đăng nhập lại.");
+          setIsLogin(true); 
+        }
+      } else {
+        alert("❌ Lỗi: " + data.error);
+      }
+    } catch (error) {
+      alert("❌ Không thể kết nối tới máy chủ Backend! Hãy chắc chắn cổng 5000 đang chạy.");
+    }
+  };
 
   return (
     <div className="app-container modern-theme">
-      {/* HEADER ĐỒNG BỘ */}
       <header className="main-header">
         <div 
           className="logo-modern" 
@@ -19,7 +59,6 @@ function Login({ setCurrentPage, cart = [] }) {
         <nav className="nav-links">
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('home'); }}>Trang chủ</a>
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Sản phẩm</a>
-          {/* Đã sửa link Thông tin thanh toán */}
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('payment-info'); }}>Thông tin thanh toán</a>
           <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('contact'); }}>Liên hệ</a>
         </nav>
@@ -43,22 +82,22 @@ function Login({ setCurrentPage, cart = [] }) {
             <p>{isLogin ? 'Đăng nhập để tiếp tục trải nghiệm' : 'Tạo tài khoản mới tại MasterCD'}</p>
           </div>
 
-          <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+          <form className="auth-form" onSubmit={handleSubmit}>
             {!isLogin && (
               <div className="input-group">
                 <label>Họ và Tên</label>
-                <input type="text" placeholder="Nhập tên của bạn" />
+                <input type="text" name="name" placeholder="Nhập tên của bạn" onChange={handleChange} required={!isLogin} />
               </div>
             )}
 
             <div className="input-group">
               <label>Email</label>
-              <input type="email" placeholder="Nhập địa chỉ email" />
+              <input type="email" name="email" placeholder="Nhập địa chỉ email" onChange={handleChange} required />
             </div>
 
             <div className="input-group">
               <label>Mật khẩu</label>
-              <input type="password" placeholder="Nhập mật khẩu" />
+              <input type="password" name="password" placeholder="Nhập mật khẩu" onChange={handleChange} required />
             </div>
 
             <button type="submit" className="btn-auth">
@@ -77,7 +116,6 @@ function Login({ setCurrentPage, cart = [] }) {
         </div>
       </main>
 
-      {/* GỌI COMPONENT FOOTER DÙNG CHUNG */}
       <Footer setCurrentPage={setCurrentPage} />
     </div>
   );

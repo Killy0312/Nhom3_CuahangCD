@@ -1,25 +1,26 @@
-import express from "express";
-import mongoose from "mongoose";
-import cors from "cors";
-import productRoutes from "./routes/productRoutes.js"; // Nhớ phải có đuôi .js ở đây nhé
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 
+// Nhập 2 cái route vừa sửa ở trên vào
+import productRoutes from './routes/productRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+
+dotenv.config();
 const app = express();
-const PORT = 5000;
 
-// Cấu hình Middleware
 app.use(cors());
 app.use(express.json());
 
-// Kết nối cơ sở dữ liêu
-mongoose
-  .connect("mongodb://localhost:27017/mastercd")
-  .then(() => console.log("👉 Kết nối thành công tới MongoDB: mastercd"))
-  .catch((err) => console.error("❌ Lỗi kết nối MongoDB:", err));
+// Kết nối DB
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ Kết nối MongoDB thành công!'))
+  .catch((err) => console.log('❌ Lỗi kết nối DB:', err));
 
-// Định tuyến API
-app.use("/api", productRoutes);
+// Ghim các đường link API
+app.use('/api/products', productRoutes);
+app.use('/api/auth', authRoutes); 
 
-// Khởi chạy server
-app.listen(PORT, () => {
-  console.log(`🚀 Backend Server đang chạy tại: http://localhost:${PORT}`);
-});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Server chạy ở http://localhost:${PORT}`));

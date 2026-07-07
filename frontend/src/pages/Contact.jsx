@@ -1,35 +1,13 @@
 import React from 'react';
 import './Contact.css';
+import Header from '../components/Header.jsx'; 
 import Footer from '../components/Footer.jsx'; 
 
 function Contact({ setCurrentPage, cart = [] }) {
   return (
     <div className="app-container modern-theme">
-      <header className="main-header">
-        <div 
-          className="logo-modern" 
-          onClick={() => setCurrentPage('home')} 
-          style={{ cursor: 'pointer' }}
-          title="Về trang chủ"
-        >
-          <span className="accent-text">Master</span>CD
-        </div>
-        <nav className="nav-links">
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('home'); }}>Trang chủ</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Sản phẩm</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('payment-info'); }}>Thông tin thanh toán</a>
-          <a href="#" className="active" onClick={(e) => e.preventDefault()}>Liên hệ</a>
-        </nav>
-        <div className="header-icons">
-          <button onClick={() => alert('Chức năng tìm kiếm đang được phát triển!')} style={{ cursor: 'pointer' }}>🔍</button>
-          
-          <button onClick={() => setCurrentPage('cart')} style={{ cursor: 'pointer' }}>
-            🛒 <span className="cart-badge">{cart.reduce((total, item) => total + item.quantity, 0)}</span>
-          </button>
-          
-          <button onClick={() => setCurrentPage('login')} className="btn-login" style={{ cursor: 'pointer' }}>Đăng nhập</button>
-        </div>
-      </header>
+      
+      <Header setCurrentPage={setCurrentPage} cart={cart} />
 
       <section className="contact-banner">
         <h1>Kết nối với <span className="accent-text">MasterCD</span></h1>

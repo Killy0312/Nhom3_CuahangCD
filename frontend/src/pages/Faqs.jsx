@@ -1,6 +1,7 @@
 import React from 'react';
 import './Faqs.css';
 import Footer from '../components/Footer.jsx';
+import Header from '../components/Header.jsx';
 
 function Faqs({ setCurrentPage, cart = [] }) {
   const faqList = [

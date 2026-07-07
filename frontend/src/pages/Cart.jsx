@@ -1,5 +1,6 @@
 import React from 'react';
 import './Cart.css';
+import Header from '../components/Header.jsx'; 
 import Footer from '../components/Footer.jsx'; 
 
 function Cart({ setCurrentPage, cart, updateCartItem }) {
@@ -11,24 +12,9 @@ function Cart({ setCurrentPage, cart, updateCartItem }) {
 
   return (
     <div className="app-container modern-theme">
-      <header className="main-header">
-        <div className="logo-modern" onClick={() => setCurrentPage('home')} style={{ cursor: 'pointer' }}>
-          <span className="accent-text">Master</span>CD
-        </div>
-        <nav className="nav-links">
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('home'); }}>Trang chủ</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Sản phẩm</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('payment-info'); }}>Thông tin thanh toán</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('contact'); }}>Liên hệ</a>
-        </nav>
-        <div className="header-icons">
-          <button onClick={() => alert('Chức năng tìm kiếm đang được phát triển!')} style={{ cursor: 'pointer' }}>🔍</button>
-          <button className="active-icon" style={{ cursor: 'pointer' }}>
-            🛒 <span className="cart-badge">{cart.reduce((total, item) => total + item.quantity, 0)}</span>
-          </button>
-          <button onClick={() => setCurrentPage('login')} className="btn-login" style={{ cursor: 'pointer' }}>Đăng nhập</button>
-        </div>
-      </header>
+      
+      {/* THAY TOÀN BỘ KHỐI HEADER BẰNG DÒNG NÀY */}
+      <Header setCurrentPage={setCurrentPage} cart={cart} />
 
       <main className="cart-main">
         <h1>Giỏ hàng của bạn</h1>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Checkout.css';
-import Footer from '../components/Footer.jsx'; // Import Component Footer
+import Footer from '../components/Footer.jsx'; 
+import Header from '../components/Header.jsx';
 
 function Checkout({ setCurrentPage, cart, clearCart }) {
   const [paymentMethod, setPaymentMethod] = useState('cod');

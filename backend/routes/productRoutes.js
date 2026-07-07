@@ -1,15 +1,16 @@
-import express from "express";
-import Product from "../models/Product.js"; // Phải có .js ở cuối
+import express from 'express';
+import Product from '../models/Product.js';
 
 const router = express.Router();
 
-router.get("/products", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const products = await Product.find({});
+    const products = await Product.find({}); // Kéo toàn bộ đĩa CD từ MongoDB
     res.json(products);
   } catch (error) {
-    res.status(500).json({ message: "Lỗi", error });
+    console.error("Lỗi lấy sản phẩm:", error);
+    res.status(500).json({ message: "Lỗi Server" });
   }
 });
 
-export default router; // Đảm bảo chỉ dùng export này
+export default router;

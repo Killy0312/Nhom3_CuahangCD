@@ -1,36 +1,16 @@
+import React from 'react';
 import '../App.css';
+import Header from '../components/Header.jsx'; 
 import Footer from '../components/Footer.jsx';
 
 function Home({ setCurrentPage, cart = [] }) {
   return (
     <div className="app-container modern-theme">
-      <header className="main-header">
-        <div 
-          className="logo-modern" 
-          onClick={() => setCurrentPage('home')}
-          style={{ cursor: 'pointer' }}
-        >
-          <span className="accent-text">Master</span>CD
-        </div>
-        <nav className="nav-links">
-          <a href="#" className="active" onClick={(e) => { e.preventDefault(); setCurrentPage('home'); }}>Trang chủ</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Sản phẩm</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('payment-info'); }}>Thông tin thanh toán</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('contact'); }}>Liên hệ</a>  
-        </nav>
-        <div className="header-icons">
-          {/* Đã thêm thông báo (Alert) cho nút Kính lúp */}
-          <button onClick={() => alert('Chức năng tìm kiếm đang được phát triển!')} style={{ cursor: 'pointer' }}>🔍</button>
-          
-          <button onClick={() => setCurrentPage('cart')} style={{ cursor: 'pointer' }}>
-            🛒 <span className="cart-badge">{cart.reduce((total, item) => total + item.quantity, 0)}</span>
-          </button>
-          <button onClick={() => setCurrentPage('login')} className="btn-login" style={{ cursor: 'pointer' }}>
-            Đăng nhập
-          </button>
-        </div>
-      </header>
+      
+      {/* CHỈ CẦN 1 DÒNG NÀY ĐỂ GỌI HEADER DÙNG CHUNG */}
+      <Header setCurrentPage={setCurrentPage} cart={cart} />
 
+      {/* BANNER CHÍNH */}
       <section className="hero-banner">
         <div className="hero-content">
           <span className="badge">Chất lượng 16-bit,44.1kHz</span>
@@ -51,6 +31,7 @@ function Home({ setCurrentPage, cart = [] }) {
         </div>
       </section>
 
+      {/* PHÂN LOẠI ĐỊNH DẠNG */}
       <section className="categories-section">
         <h2>Phân loại định dạng</h2>
         <div className="category-grid">
@@ -73,6 +54,7 @@ function Home({ setCurrentPage, cart = [] }) {
         </div>
       </section>
 
+      {/* BẢN PHÁT HÀNH MỚI */}
       <section className="new-release-section">
         <div className="section-header">
           <h2>Bản phát hành mới nhất</h2>
@@ -86,6 +68,7 @@ function Home({ setCurrentPage, cart = [] }) {
         </div>
       </section>
 
+      {/* TRIẾT LÝ SẢN PHẨM */}
       <section className="story-section reverse">
         <div className="story-text">
           <span className="subtitle">Triết lý âm thanh</span>
@@ -97,9 +80,7 @@ function Home({ setCurrentPage, cart = [] }) {
         <img src="/images/quality01.png" alt="Hệ thống loa" className="story-img-placeholder" style={{ objectFit: 'contain' }} />
       </section>
 
-      {/* Đã xóa toàn bộ HTML Footer cũ và gọi Component Footer mới ra dùng */}
       <Footer setCurrentPage={setCurrentPage} />
-      
     </div>
   );
 }
