@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ProductDetail.css';
+import Header from '../components/Header.jsx'; 
 import Footer from '../components/Footer.jsx';
 
 function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
+  const [toast, setToast] = useState({ show: false, message: '' });
+  const [toastTimer, setToastTimer] = useState(null);
+
   if (!product) {
     return (
       <div className="app-container modern-theme" style={{ textAlign: 'center', padding: '100px' }}>
@@ -11,6 +15,14 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
       </div>
     );
   }
+
+  // Hàm kích hoạt Toast nổi
+  const triggerToast = (msg) => {
+    if (toastTimer) clearTimeout(toastTimer);
+    setToast({ show: true, message: msg });
+    const timer = setTimeout(() => setToast({ show: false, message: '' }), 3000);
+    setToastTimer(timer);
+  };
 
   // 1. Danh sách bài hát cho Album LUX - ROSALÍA
   const luxTracklist = [
@@ -127,7 +139,6 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
     { id: 8, title: "Nam Bán Cầu", artist: "Văn Mai Hương, Hứa Kim Tuyền", duration: "3:18" },
   ];
 
-  // Danh sách giả lập cho các Album chưa nhập liệu
   const defaultTracklist = [
     { id: 1, title: "Track 01 - Intro", artist: product.artist, duration: "2:45" },
     { id: 2, title: "Track 02 - The Journey", artist: product.artist, duration: "3:12" },
@@ -136,25 +147,15 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
     { id: 5, title: "Track 05 - Acoustic Sessions", artist: product.artist, duration: "5:10" },
   ];
 
-  // Logic tự động chọn list nhạc theo tên Album
   let displayTracklist = defaultTracklist;
-  if (product.name === "Lux") {
-    displayTracklist = luxTracklist;
-  } else if (product.name === "Music Has The Right to the children") {
-    displayTracklist = boardsOfCanadaTracklist;
-  } else if (product.name === "Let God Sort Em Out") {
-    displayTracklist = clipseTracklist;
-  } else if (product.name === "Willoughby Tucker, I'll Always Love You") {
-    displayTracklist = ethelCainTracklist;
-  } else if (product.name === "moisturizer") {
-    displayTracklist = wetLegTracklist;
-  } else if (product.name === "Neon Grey Midnight Green") {
-    displayTracklist = nekoCaseTracklist;
-  } else if (product.name === "Minh Tinh") {
-    displayTracklist = vanMaiHuongTracklist;
-  }
+  if (product.name === "Lux") displayTracklist = luxTracklist;
+  else if (product.name === "Music Has The Right to the children") displayTracklist = boardsOfCanadaTracklist;
+  else if (product.name === "Let God Sort Em Out") displayTracklist = clipseTracklist;
+  else if (product.name === "Willoughby Tucker, I'll Always Love You") displayTracklist = ethelCainTracklist;
+  else if (product.name === "moisturizer") displayTracklist = wetLegTracklist;
+  else if (product.name === "Neon Grey Midnight Green") displayTracklist = nekoCaseTracklist;
+  else if (product.name === "Minh Tinh") displayTracklist = vanMaiHuongTracklist;
 
-  // Tự động sinh Thông số kỹ thuật chuyên sâu nếu là Thiết bị nghe
   const techSpecs = [
     { label: "Thương hiệu", value: product.artist }, 
     { label: "Bảo hành", value: "12 Tháng chính hãng" },
@@ -163,29 +164,21 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
     { label: "Đổi trả", value: "1-đổi-1 trong 7 ngày nếu có lỗi NSX" },
   ];
 
+  // 💡 HÀM ĐỔ MÔ TẢ ĐỘNG THAY THẾ DÒNG CHỮ QUÊ MÙA CŨ
+  const generateDescription = () => {
+    if (product.category === 'Thiết bị nghe') {
+      return `Thiết bị đầu phát ${product.name} cao cấp đến từ hãng kỹ nghệ âm thanh danh tiếng ${product.artist}. Được chế tác tinh xảo nhằm tối ưu hóa công suất khai thác dải động kỹ thuật số, giảm thiểu tối đa hiện tượng nhiễu nền jitter, mang lại chất âm Hi-Fi chuẩn mực phòng thu cho căn phòng của bạn.`;
+    }
+    const genreText = product.genre ? `thuộc trường phái âm nhạc ${product.genre}` : '';
+    return `Tuyệt phẩm nghệ thuật "${product.name}" trình bày bởi nghệ sĩ ${product.artist} ${genreText}. Ấn bản định dạng ${product.category} cao cấp được hoàn thiện bằng quy trình đúc vật lý tiêu chuẩn khắt khe, cam kết bảo lưu toàn vẹn tín hiệu âm thanh master không nén, mang giá trị sưu tầm trường tồn theo thời gian.`;
+  };
+
   return (
     <div className="app-container modern-theme">
-      {/* HEADER */}
-      <header className="main-header">
-        <div className="logo-modern" onClick={() => setCurrentPage('home')} style={{ cursor: 'pointer' }}>
-          <span className="accent-text">Master</span>CD
-        </div>
-        <nav className="nav-links">
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('home'); }}>Trang chủ</a>
-          <a href="#" className="active" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Sản phẩm</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('payment-info'); }}>Thông tin thanh toán</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('contact'); }}>Liên hệ</a>
-        </nav>
-        <div className="header-icons">
-          <button onClick={() => alert('Chức năng tìm kiếm đang được phát triển!')} style={{ cursor: 'pointer' }}>🔍</button>
-          <button onClick={() => setCurrentPage('cart')} style={{ cursor: 'pointer' }}>
-            🛒 <span className="cart-badge">{cart.reduce((total, item) => total + item.quantity, 0)}</span>
-          </button>
-          <button onClick={() => setCurrentPage('login')} className="btn-login" style={{ cursor: 'pointer' }}>Đăng nhập</button>
-        </div>
-      </header>
+      
+      {/* ĐÃ THAY THẾ: GỌI HEADER CHUNG ĐỂ ĐỒNG BỘ AVATAR */}
+      <Header setCurrentPage={setCurrentPage} cart={cart} />
 
-      {/* NỘI DUNG CHI TIẾT SẢN PHẨM */}
       <main className="product-detail-main">
         <button className="btn-back" onClick={() => setCurrentPage('products')}>
           &#8592; Quay lại danh sách
@@ -204,27 +197,28 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
 
           {/* CỘT PHẢI: Thông tin & Đặt hàng */}
           <div className="detail-info-section">
-            <span className="detail-category">{product.category}</span>
+            <div className="detail-meta-row">
+              <span className="detail-category">{product.category}</span>
+              {product.genre && <span className="detail-genre-tag">{product.genre}</span>}
+            </div>
+            
             <h1 className="detail-title">{product.name}</h1>
             <p className="detail-artist">{product.artist}</p>
             
             <div className="detail-price-box">
               <span className="detail-price">{product.price}</span>
-              <span className="detail-status">Tình trạng: <span className="text-green">Còn hàng</span></span>
+              <span className="detail-status">Tình trạng: <span className="text-green">Còn hàng ({product.stock || 20} sản phẩm)</span></span>
             </div>
 
-            <p className="detail-description">
-              {product.category === 'Thiết bị nghe' 
-                ? `Thiết bị ${product.name} cao cấp từ thương hiệu ${product.artist}. Giúp khai thác tối đa dải động và chi tiết của các định dạng âm thanh vật lý, mang lại trải nghiệm Hi-Fi chân thực nhất cho người đam mê.`
-                : `Sản phẩm ${product.category} chất lượng cao, mang đến trải nghiệm âm thanh nguyên bản không nén. Phù hợp cho những hệ thống âm thanh tiêu chuẩn và người đam mê sưu tầm.`}
-            </p>
+            {/* SỬ DỤNG HÀM BIẾN ĐỔI MÔ TẢ ĐỘNG */}
+            <p className="detail-description">{generateDescription()}</p>
 
             <div className="detail-actions">
               <button 
                 className="btn-add-to-cart-large"
                 onClick={() => {
                   addToCart(product);
-                  alert(`Đã thêm ${product.name} vào giỏ hàng!`);
+                  triggerToast(`Đã thêm "${product.name}" vào giỏ hàng thành công!`);
                 }}
               >
                 THÊM VÀO GIỎ HÀNG
@@ -240,48 +234,60 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
               </button>
             </div>
 
-            {/* KIỂM TRA CATEGORY: NẾU KHÔNG PHẢI THIẾT BỊ NGHE THÌ HIỆN TRACKLIST */}
-            {product.category !== 'Thiết bị nghe' ? (
-              <div className="tracklist-container">
-                <div className="tracklist-header">
-                  <span className="th-hash">#</span>
-                  <span className="th-title">Title</span>
-                  <span className="th-time">🕒</span>
-                </div>
-                <ul className="tracklist">
-                  {displayTracklist.map((track) => (
-                    <li key={track.id} className="track-item">
-                      <div className="track-left">
-                        <span className="track-number">{track.id}</span>
-                        <div className="track-info">
-                          <span className="track-name">{track.title}</span>
-                          <span className="track-artist">{track.artist}</span>
+            {/* KHU VỰC DANH SÁCH BÀI HÁT / THÔNG SỐ */}
+            <div className="tracklist-container">
+              <div className="tracklist-header">
+                {product.category !== 'Thiết bị nghe' ? (
+                  <>
+                    <span className="th-hash">#</span>
+                    <span className="th-title">Danh sách bài hát phát hành</span>
+                    <span className="th-time">🕒</span>
+                  </>
+                ) : (
+                  <span className="th-title" style={{ paddingLeft: 0 }}>Thông số kỹ thuật sản phẩm</span>
+                )}
+              </div>
+              
+              {/* 💡 THÊM LỚP BỌC SCROLL-BOX ĐỂ GIỚI HẠN CHIỀU CAO DANH SÁCH */}
+              <div className="tracklist-scroll-box">
+                <ul className="tracklist-list">
+                  {product.category !== 'Thiết bị nghe' ? (
+                    displayTracklist.map((track) => (
+                      <li key={track.id} className="track-item">
+                        <div className="track-left">
+                          <span className="track-number">{track.id}</span>
+                          <div className="track-meta">
+                            <span className="track-name">{track.title}</span>
+                            <span className="track-sub-artist">{track.artist}</span>
+                          </div>
                         </div>
-                      </div>
-                      <span className="track-duration">{track.duration}</span>
-                    </li>
-                  ))}
+                        <span className="track-duration">{track.duration}</span>
+                      </li>
+                    ))
+                  ) : (
+                    techSpecs.map((spec, index) => (
+                      <li key={index} className="track-item spec-item">
+                        <span className="spec-label">{spec.label}:</span>
+                        <span className="spec-value">{spec.value}</span>
+                      </li>
+                    ))
+                  )}
                 </ul>
               </div>
-            ) : (
-              /* NẾU LÀ THIẾT BỊ NGHE: HIỂN THỊ THÔNG SỐ KỸ THUẬT (SPECS) */
-              <div className="tracklist-container specs-container">
-                <div className="tracklist-header">
-                  <span className="th-title" style={{ paddingLeft: 0 }}>Thông số & Chính sách</span>
-                </div>
-                <ul className="tracklist">
-                  {techSpecs.map((spec, index) => (
-                    <li key={index} className="track-item" style={{ padding: '15px 5px' }}>
-                      <span className="spec-label" style={{ color: '#94a3b8', width: '120px' }}>{spec.label}:</span>
-                      <span className="spec-value" style={{ color: '#fff', fontWeight: '500', flex: 1 }}>{spec.value}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            </div>
+
           </div>
         </div>
       </main>
+
+      {/* TOAST NOTIFICATION PHÁT SÁNG CYAN GÓC PHẢI */}
+      <div className={`toast-notification ${toast.show ? 'show' : ''}`}>
+        <div className="toast-content">
+          <span className="toast-icon">🛒</span>
+          <span className="toast-text">{toast.message}</span>
+        </div>
+        <div className="toast-progress-bar"></div>
+      </div>
 
       <Footer setCurrentPage={setCurrentPage} />
     </div>

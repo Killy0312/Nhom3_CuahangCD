@@ -1,14 +1,29 @@
 import React, { useState } from 'react';
 import './Login.css';
+import Header from '../components/Header.jsx'; // ĐỒNG BỘ LUÔN HEADER DÙNG CHUNG
 import Footer from '../components/Footer.jsx'; 
 
 function Login({ setCurrentPage, cart = [] }) {
   const [isLogin, setIsLogin] = useState(true);
-  
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+
+  // 💡 State quản lý Toast: Hỗ trợ thông báo nhiều trạng thái (Thành công / Thất bại)
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [toastTimer, setToastTimer] = useState(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // 💡 Hàm gọi thông báo nổi tùy biến theo loại
+  const triggerToast = (msg, type = 'success') => {
+    if (toastTimer) clearTimeout(toastTimer);
+    setToast({ show: true, message: msg, type: type });
+    
+    const timer = setTimeout(() => {
+      setToast({ show: false, message: '', type: 'success' });
+    }, 3000);
+    setToastTimer(timer);
   };
 
   const handleSubmit = async (e) => {
@@ -29,51 +44,37 @@ function Login({ setCurrentPage, cart = [] }) {
 
       if (response.ok) {
         if (isLogin) {
-          alert("🎉 Đăng nhập thành công!");
-          localStorage.setItem('token', data.token); 
-          localStorage.setItem('userName', data.user.name); 
-          // Đăng nhập xong đưa người dùng về trang chủ
-          setCurrentPage('home'); 
+          // Bắt chắc chắn tên từ Backend, dự phòng nếu trống thì lấy tên Phú
+          const userName = (data.user && data.user.name) ? data.user.name : "Phú";
+          localStorage.setItem('token', data.token || "token_tam_thoi"); 
+          localStorage.setItem('userName', userName); 
+
+          // Hiện thông báo thành công xịn xò trước
+          triggerToast("🎉 Đăng nhập thành công! Đang chuyển hướng...", "success"); 
+
+          // Delay 1.5 giây cho người dùng nhìn thấy Toast rồi mới chuyển trang + reload
+          setTimeout(() => {
+            setCurrentPage('home'); 
+            window.location.reload();
+          }, 1500);
+
         } else {
-          alert("🎉 Đăng ký thành công! Vui lòng đăng nhập lại.");
+          triggerToast("🎉 Đăng ký thành công! Vui lòng đăng nhập lại.", "success");
           setIsLogin(true); 
         }
       } else {
-        alert("❌ Lỗi: " + data.error);
+        triggerToast(`❌ Lỗi: ${data.error || "Thông tin không hợp lệ"}`, "error");
       }
     } catch (error) {
-      alert("❌ Không thể kết nối tới máy chủ Backend! Hãy chắc chắn cổng 5000 đang chạy.");
+      triggerToast("❌ Không thể kết nối tới máy chủ Backend! Hãy kiểm tra cổng 5000.", "error");
     }
   };
 
   return (
     <div className="app-container modern-theme">
-      <header className="main-header">
-        <div 
-          className="logo-modern" 
-          onClick={() => setCurrentPage('home')}
-          style={{ cursor: 'pointer' }}
-        >
-          <span className="accent-text">Master</span>CD
-        </div>
-        <nav className="nav-links">
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('home'); }}>Trang chủ</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Sản phẩm</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('payment-info'); }}>Thông tin thanh toán</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('contact'); }}>Liên hệ</a>
-        </nav>
-        <div className="header-icons">
-          <button onClick={() => alert('Chức năng tìm kiếm đang được phát triển!')} style={{ cursor: 'pointer' }}>🔍</button>
-          
-          <button onClick={() => setCurrentPage('cart')} style={{ cursor: 'pointer' }}>
-            🛒 <span className="cart-badge">{cart.reduce((total, item) => total + item.quantity, 0)}</span>
-          </button>
-          
-          <button onClick={() => setCurrentPage('login')} className="btn-login" style={{ cursor: 'pointer', border: '1px solid #00e5ff', color: '#00e5ff' }}>
-            Đăng nhập
-          </button>
-        </div>
-      </header>
+      
+      {/* Thay bằng Header dùng chung để Avatar đổi đồng bộ */}
+      <Header setCurrentPage={setCurrentPage} cart={cart} />
 
       <main className="auth-main-content">
         <div className="auth-card">
@@ -115,6 +116,15 @@ function Login({ setCurrentPage, cart = [] }) {
           </div>
         </div>
       </main>
+
+      {/* 💡 CỤM TOAST NOTIFICATION THÔNG MINH CHO TRANG LOGIN */}
+      <div className={`toast-notification ${toast.type} ${toast.show ? 'show' : ''}`}>
+        <div className="toast-content">
+          <span className="toast-icon">{toast.type === 'success' ? '🎉' : '⚠️'}</span>
+          <span className="toast-text">{toast.message}</span>
+        </div>
+        <div className="toast-progress-bar"></div>
+      </div>
 
       <Footer setCurrentPage={setCurrentPage} />
     </div>

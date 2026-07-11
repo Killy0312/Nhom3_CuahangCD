@@ -6,46 +6,64 @@ import Header from '../components/Header.jsx';
 function Checkout({ setCurrentPage, cart, clearCart }) {
   const [paymentMethod, setPaymentMethod] = useState('cod');
 
+  // 💡 State xử lý thông báo nổi Toast thời thượng
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [toastTimer, setToastTimer] = useState(null);
+
   const parsePrice = (priceStr) => parseInt(priceStr.replace(/\D/g, '')) || 0;
   const formatPrice = (num) => num.toLocaleString('vi-VN') + 'đ';
   const totalPrice = cart.reduce((total, item) => total + (parsePrice(item.price) * item.quantity), 0);
 
-  const handlePlaceOrder = (e) => {
+  // 💡 Hàm gọi Toast Notification
+  const triggerToast = (msg, type = 'success') => {
+    if (toastTimer) clearTimeout(toastTimer);
+    setToast({ show: true, message: msg, type: type });
+    
+    const timer = setTimeout(() => {
+      setToast({ show: false, message: '', type: 'success' });
+    }, 3000);
+    setToastTimer(timer);
+  };
+
+  // 💡 Hàm gửi đơn hàng lên Backend cổng 5000 và kích hoạt trừ kho dữ liệu
+  const handlePlaceOrder = async (e) => {
     e.preventDefault();
-    alert('🎉 Đặt hàng thành công! Mã đơn hàng của bạn là: #MCD' + Math.floor(Math.random() * 10000));
-    clearCart();
-    setCurrentPage('home');
+
+    try {
+      const response = await fetch('http://localhost:5000/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cart: cart }) // Bắn nguyên cái giỏ hàng lên
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Bắn Toast thông báo thành công phát sáng mã đơn hàng xịn xò
+        triggerToast(`🎉 Đặt hàng thành công! Mã đơn hàng: #${data.orderId}`, "success");
+        
+        // Chờ 2 giây cho người dùng nhìn hiệu ứng rồi mới xóa giỏ và đá về trang chủ
+        setTimeout(() => {
+          clearCart();
+          setCurrentPage('home');
+        }, 2000);
+      } else {
+        // Nếu Backend báo lỗi không đủ hàng tồn kho, hiện Toast màu đỏ cảnh báo ngay
+        triggerToast(`⚠️ ${data.error}`, "error");
+      }
+    } catch (error) {
+      triggerToast("❌ Thất bại: Không thể kết nối tới máy chủ xử lý kho hàng Backend!", "error");
+    }
   };
 
   return (
     <div className="app-container modern-theme">
-      {/* HEADER CHUẨN ĐỒNG BỘ */}
-      <header className="main-header">
-        <div 
-          className="logo-modern" 
-          onClick={() => setCurrentPage('home')} 
-          style={{ cursor: 'pointer' }}
-        >
-          <span className="accent-text">Master</span>CD
-        </div>
-        <nav className="nav-links">
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('home'); }}>Trang chủ</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('products'); }}>Sản phẩm</a>
-          <a href="#" className="active" onClick={(e) => { e.preventDefault(); setCurrentPage('payment-info'); }}>Thông tin thanh toán</a>
-          <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('contact'); }}>Liên hệ</a>
-        </nav>
-        <div className="header-icons">
-          <button onClick={() => alert('Chức năng tìm kiếm đang được phát triển!')} style={{ cursor: 'pointer' }}>🔍</button>
-          <button onClick={() => setCurrentPage('cart')} style={{ cursor: 'pointer' }}>
-            🛒 <span className="cart-badge">{cart.reduce((total, item) => total + item.quantity, 0)}</span>
-          </button>
-          <button onClick={() => setCurrentPage('login')} className="btn-login" style={{ cursor: 'pointer' }}>Đăng nhập</button>
-        </div>
-      </header>
+      
+      {/* ĐÃ SỬA: ĐỒNG BỘ AVATAR CHỮ PHÚ BẰNG COMPONENT DÙNG CHUNG */}
+      <Header setCurrentPage={setCurrentPage} cart={cart} />
 
       {/* KIỂM TRA GIỎ HÀNG */}
       {cart.length === 0 ? (
-        // Nếu giỏ hàng trống: Hiện thông báo nhưng vẫn giữ Header và Footer
         <main className="checkout-main" style={{ textAlign: 'center', padding: '100px 20px', minHeight: '50vh' }}>
           <h2>Không có dữ liệu thanh toán</h2>
           <p style={{ color: '#94a3b8', marginTop: '10px' }}>Vui lòng thêm sản phẩm vào giỏ hàng trước khi tiến hành đặt hàng.</p>
@@ -58,7 +76,6 @@ function Checkout({ setCurrentPage, cart, clearCart }) {
           </button>
         </main>
       ) : (
-        // Nếu có hàng: Hiện form thanh toán bình thường
         <main className="checkout-main">
           <form className="checkout-layout" onSubmit={handlePlaceOrder}>
             {/* CỘT TRÁI: ĐỊA CHỈ & PHƯƠNG THỨC */}
@@ -127,7 +144,7 @@ function Checkout({ setCurrentPage, cart, clearCart }) {
               <h2 className="section-title">Đơn hàng của bạn</h2>
               <div className="checkout-items">
                 {cart.map(item => (
-                  <div className="checkout-item" key={item.id}>
+                  <div className="checkout-item" key={item.id || item._id}>
                     <img src={item.img} alt={item.name} />
                     <div className="checkout-item-info">
                       <h4>{item.name}</h4>
@@ -153,7 +170,15 @@ function Checkout({ setCurrentPage, cart, clearCart }) {
         </main>
       )}
 
-      {/* GỌI COMPONENT FOOTER */}
+      {/* 💡 THÀNH PHẦN TOAST NOTIFICATION CHO TRANG CHECKOUT */}
+      <div className={`toast-notification ${toast.type} ${toast.show ? 'show' : ''}`}>
+        <div className="toast-content">
+          <span className="toast-icon">{toast.type === 'success' ? '🎉' : '⚠️'}</span>
+          <span className="toast-text">{toast.message}</span>
+        </div>
+        <div className="toast-progress-bar"></div>
+      </div>
+
       <Footer setCurrentPage={setCurrentPage} />
     </div>
   );

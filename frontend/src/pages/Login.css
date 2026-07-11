@@ -102,3 +102,96 @@
 .toggle-link:hover {
   text-decoration: underline;
 }
+
+/* ================= 💡 TOAST NOTIFICATION CHO TRANG LOGIN ================= */
+.toast-notification {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #161920;
+  border: 1px solid #232731;
+  border-radius: 8px;
+  padding: 16px 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  transform: translateX(150%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.25), opacity 0.3s ease;
+}
+
+.toast-notification.show {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Phân loại trạng thái màu sắc */
+.toast-notification.success {
+  border-left: 4px solid #00e5ff; /* Xanh Cyan thành công */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 229, 255, 0.1);
+}
+
+.toast-notification.error {
+  border-left: 4px solid #ff4d4f; /* Đỏ rực cảnh báo lỗi */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 77, 79, 0.1);
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toast-icon {
+  font-size: 16px;
+}
+
+.toast-text {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.toast-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+/* Đổi màu thanh chạy thời gian tương ứng */
+.toast-notification.success.show .toast-progress-bar {
+  background: linear-gradient(to right, #0077ff, #00e5ff);
+  animation: toastProgress 3s linear forwards;
+}
+
+.toast-notification.error.show .toast-progress-bar {
+  background: linear-gradient(to right, #d32f2f, #ff4d4f);
+  animation: toastProgress 3s linear forwards;
+}
+
+/* Delay riêng cho trường hợp Đăng nhập thành công để kịp nhìn trước khi reload */
+.toast-notification.success.show {
+  /* Giữ animation chạy khớp luồng delay chuyển trang */
+}
+
+@keyframes toastProgress {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+@media (max-width: 576px) {
+  .toast-notification {
+    bottom: 20px;
+    right: 20px;
+    left: 20px;
+    transform: translateY(150%);
+  }
+  .toast-notification.show {
+    transform: translateY(0);
+  }
+}

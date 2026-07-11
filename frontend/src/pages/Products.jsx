@@ -5,14 +5,26 @@ import Footer from '../components/Footer.jsx';
 
 function Products({ setCurrentPage, addToCart, cart }) {
   const [products, setProducts] = useState([]);
-  
   const [isLoading, setIsLoading] = useState(true);
+
+  const [activeCategory, setActiveCategory] = useState('Tất cả');
+  const [activeGenre, setActiveGenre] = useState('Tất cả');
+  const [activePage, setActivePage] = useState(1);
+  
+  const [isFormatOpen, setIsFormatOpen] = useState(true);
+  const [isGenreOpen, setIsGenreOpen] = useState(true);
+  
+  // 💡 State xử lý thông báo nổi (Toast Notification)
+  const [toast, setToast] = useState({ show: false, message: '' });
+  const [toastTimer, setToastTimer] = useState(null);
+  
+  const itemsPerPage = 12;
+  const genresList = ['Tất cả', 'Rock', 'Metal', 'Ambient', 'Jazz', 'Pop', 'Electronic'];
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/products');
-        
         if (response.ok) {
           const data = await response.json();
           setProducts(data); 
@@ -25,34 +37,46 @@ function Products({ setCurrentPage, addToCart, cart }) {
         setIsLoading(false);
       }
     };
-
     fetchProducts();
   }, []); 
 
-  const [activeCategory, setActiveCategory] = useState('Tất cả');
-  const [activePage, setActivePage] = useState(1);
-  
-  const itemsPerPage = 12;
+  // 💡 Hàm kích hoạt hiện Toast thông minh (Chặn trùng lặp nếu click nhanh)
+  const triggerToast = (msg) => {
+    if (toastTimer) clearTimeout(toastTimer);
+    
+    setToast({ show: true, message: msg });
+    
+    const timer = setTimeout(() => {
+      setToast({ show: false, message: '' });
+    }, 3000); // 3 giây tự tắt
+    setToastTimer(timer);
+  };
 
   const handleCategoryChange = (cat) => {
     setActiveCategory(cat);
     setActivePage(1); 
   };
 
-  const filteredProducts = activeCategory === 'Tất cả' 
-    ? products 
-    : products.filter(item => item.category === activeCategory);
+  const handleGenreChange = (genre) => {
+    setActiveGenre(genre);
+    setActivePage(1);
+  };
+
+  const filteredProducts = products.filter(item => {
+    const matchCategory = activeCategory === 'Tất cả' || item.category === activeCategory;
+    const itemGenre = item.genre || 'Khác';
+    const matchGenre = activeGenre === 'Tất cả' || itemGenre.toLowerCase() === activeGenre.toLowerCase();
+    return matchCategory && matchGenre;
+  });
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage); 
   const indexOfLastItem = activePage * itemsPerPage; 
   const indexOfFirstItem = indexOfLastItem - itemsPerPage; 
-  
   const currentProducts = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="app-container modern-theme">
       
-      {/* THAY THẾ TOÀN BỘ KHỐI HEADER CŨ BẰNG 1 DÒNG NÀY */}
       <Header setCurrentPage={setCurrentPage} cart={cart} />
 
       {/* BANNER SẢN PHẨM */}
@@ -61,116 +85,157 @@ function Products({ setCurrentPage, addToCart, cart }) {
         <p>Bộ sưu tập đĩa CD, Vinyl và Cassette chất lượng cao được tuyển chọn khắt khe.</p>
       </section>
 
-      {/* PHẦN LỌC & DANH SÁCH SẢN PHẨM */}
-      <main className="products-main">
-        {/* Bộ lọc */}
-        <div className="filter-bar">
-          {['Tất cả', 'CD', 'Vinyl', 'Cassette', 'Thiết bị nghe'].map((cat) => (
-            <button 
-              key={cat}
-              className={`filter-btn ${activeCategory === cat ? 'active' : ''}`}
-              onClick={() => handleCategoryChange(cat)}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {/* Xử lý hiển thị trong lúc chờ Loading hoặc Database rỗng */}
-        {isLoading ? (
-          <div className="loading-container" style={{ textAlign: 'center', padding: '50px', color: '#00e5ff' }}>
-            <h2>Đang tải kho nhạc từ Server... 🎧</h2>
-          </div>
-        ) : (
-          <>
-            {/* Lưới sản phẩm */}
-            <div className="products-grid">
-              {currentProducts.map((product) => (
-                <div key={product._id || product.id} className="product-card"> 
-                  {/* Chú ý: MongoDB tự cấp ID có tên là _id, nên thêm _id để tránh lỗi */}
-                  
-                  <div 
-                    className="product-img-wrapper" 
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => setCurrentPage('product-detail', product)}
+      {/* BỐ CỤC CHÍNH CHIA LÀM 2 CỘT */}
+      <main className="products-layout-container">
+        
+        {/* ================= CỘT TRÁI: SIDEBAR BỘ LỌC ================= */}
+        <aside className="products-sidebar">
+          <div className="sidebar-filter-group">
+            <h3 onClick={() => setIsFormatOpen(!isFormatOpen)} className="sidebar-toggle-title">
+              <span>💿 Định dạng đĩa</span>
+              <span className={`arrow-icon ${isFormatOpen ? 'open' : ''}`}>▼</span>
+            </h3>
+            {isFormatOpen && (
+              <ul className="sidebar-filter-list">
+                {['Tất cả', 'CD', 'Vinyl', 'Cassette', 'Thiết bị nghe'].map((cat) => (
+                  <li 
+                    key={cat} 
+                    className={activeCategory === cat ? 'active' : ''} 
+                    onClick={() => handleCategoryChange(cat)}
                   >
-                    <img 
-                      src={product.img} 
-                      alt={product.name} 
-                      onError={(e) => { e.target.src = 'https://via.placeholder.com/300x300/1e222a/475569?text=MasterCD' }} 
-                    />
-                    <span className="product-category-tag">{product.category}</span>
-                    <div className="product-overlay">
-                      <button 
-                        className="btn-add-to-cart" 
-                        onClick={(e) => { 
-                          e.stopPropagation(); 
-                          addToCart(product); 
-                          alert(`Đã thêm ${product.name} vào giỏ hàng!`); 
-                        }}
-                      >
-                        Thêm vào giỏ
-                      </button>
-                    </div>
-                  </div>
-                  <div className="product-info">
-                  <h3 
-                      className="product-title" 
+                    {cat}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <div className="sidebar-filter-group">
+            <h3 onClick={() => setIsGenreOpen(!isGenreOpen)} className="sidebar-toggle-title">
+              <span>🎸 Thể loại / Dòng nhạc</span>
+              <span className={`arrow-icon ${isGenreOpen ? 'open' : ''}`}>▼</span>
+            </h3>
+            {isGenreOpen && (
+              <ul className="sidebar-filter-list">
+                {genresList.map((genre) => (
+                  <li 
+                    key={genre} 
+                    className={activeGenre === genre ? 'active' : ''} 
+                    onClick={() => handleGenreChange(genre)}
+                  >
+                    {genre}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </aside>
+
+        {/* ================= CỘT PHẢI: GRID SẢN PHẨM ================= */}
+        <section className="products-content-right">
+          {isLoading ? (
+            <div className="loading-container" style={{ textAlign: 'center', padding: '50px', color: '#00e5ff' }}>
+              <h2>Đang tải kho nhạc từ Server... 🎧</h2>
+            </div>
+          ) : (
+            <>
+              <div className="products-grid">
+                {currentProducts.map((product) => (
+                  <div key={product._id || product.id} className="product-card"> 
+                    <div 
+                      className="product-img-wrapper" 
                       style={{ cursor: 'pointer' }}
                       onClick={() => setCurrentPage('product-detail', product)}
                     >
-                      {product.name}
-                    </h3>
-                    <p className="product-artist">{product.artist}</p>
-                    <div className="product-bottom">
-                      <span className="product-price">{product.price}</span>
+                      <img 
+                        src={product.img} 
+                        alt={product.name} 
+                        onError={(e) => { e.target.src = 'https://via.placeholder.com/300x300/1e222a/475569?text=MasterCD' }} 
+                      />
+                      <span className="product-category-tag">{product.category}</span>
+                      {product.genre && <span className="product-genre-tag">{product.genre}</span>}
+                      
+                      <div className="product-overlay">
+                        <button 
+                          className="btn-add-to-cart" 
+                          onClick={(e) => { 
+                            e.stopPropagation(); 
+                            addToCart(product); 
+                            // 💡 Thay thế hàm alert thô sơ bằng hàm thông báo xịn
+                            triggerToast(`Đã thêm "${product.name}" vào giỏ hàng thành công!`); 
+                          }}
+                        >
+                          Thêm vào giỏ
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div className="product-info">
+                      <h3 
+                        className="product-title" 
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => setCurrentPage('product-detail', product)}
+                      >
+                        {product.name}
+                      </h3>
+                      <p className="product-artist">{product.artist}</p>
+                      <div className="product-bottom">
+                        <span className="product-price">{product.price}</span>
+                      </div>
                     </div>
                   </div>
+                ))}
+              </div>
+              
+              {totalPages > 1 && (
+                <div className="pagination-container">
+                  <button 
+                    className="page-btn nav-btn" 
+                    disabled={activePage === 1}
+                    onClick={() => setActivePage(activePage - 1)}
+                  >
+                    &lt;
+                  </button>
+                  {[...Array(totalPages)].map((_, index) => {
+                    const pageNumber = index + 1;
+                    return (
+                      <button 
+                        key={pageNumber}
+                        className={`page-btn ${activePage === pageNumber ? 'active' : ''}`}
+                        onClick={() => setActivePage(pageNumber)}
+                      >
+                        {pageNumber}
+                      </button>
+                    );
+                  })}
+                  <button 
+                    className="page-btn nav-btn" 
+                    disabled={activePage === totalPages}
+                    onClick={() => setActivePage(activePage + 1)}
+                  >
+                    &gt;
+                  </button>
                 </div>
-              ))}
-            </div>
-            
-            {totalPages > 1 && (
-              <div className="pagination-container">
-                <button 
-                  className="page-btn nav-btn" 
-                  disabled={activePage === 1}
-                  onClick={() => setActivePage(activePage - 1)}
-                >
-                  &lt;
-                </button>
+              )}
 
-                {[...Array(totalPages)].map((_, index) => {
-                  const pageNumber = index + 1;
-                  return (
-                    <button 
-                      key={pageNumber}
-                      className={`page-btn ${activePage === pageNumber ? 'active' : ''}`}
-                      onClick={() => setActivePage(pageNumber)}
-                    >
-                      {pageNumber}
-                    </button>
-                  );
-                })}
-
-                <button 
-                  className="page-btn nav-btn" 
-                  disabled={activePage === totalPages}
-                  onClick={() => setActivePage(activePage + 1)}
-                >
-                  &gt;
-                </button>
-              </div>
-            )}
-
-            {filteredProducts.length === 0 && (
-              <div className="no-products" style={{ textAlign: 'center', padding: '50px', color: '#94a3b8' }}>
-                <p>Opps! Chưa có sản phẩm nào trong kho dữ liệu.</p>
-              </div>
-            )}
-          </>
-        )}
+              {filteredProducts.length === 0 && (
+                <div className="no-products" style={{ textAlign: 'center', padding: '100px 0', color: '#94a3b8' }}>
+                  <p style={{ fontSize: '18px' }}>Chưa có sản phẩm nào thuộc thể loại này trong kho 🛒</p>
+                </div>
+              )}
+            </>
+          )}
+        </section>
       </main>
+
+      {/* 💡 THÀNH PHẦN TOAST NOTIFICATION ĐƯỢC ĐẶT Ở ĐÂY */}
+      <div className={`toast-notification ${toast.show ? 'show' : ''}`}>
+        <div className="toast-content">
+          <span className="toast-icon">🛒</span>
+          <span className="toast-text">{toast.message}</span>
+        </div>
+        <div className="toast-progress-bar"></div>
+      </div>
 
       <Footer setCurrentPage={setCurrentPage} />
     </div>
