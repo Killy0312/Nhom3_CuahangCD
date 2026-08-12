@@ -9,11 +9,26 @@ const router = express.Router();
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    // Băm mật khẩu để bảo mật
+    const cleanEmail = email.trim();
+
+    // Tìm email không phân biệt chữ hoa/thường
+    const existingUser = await User.findOne({ 
+      email: { $regex: new RegExp(`^${cleanEmail}$`, 'i') } 
+    });
+    
+    if (existingUser) {
+      return res.status(400).json({ error: "Email này đã được sử dụng" });
+    }
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt); 
     
-    const newUser = new User({ name, email, password: hashedPassword });
+    const newUser = new User({ 
+      name, 
+      email: cleanEmail.toLowerCase(), // Lưu dạng chữ thường vào DB
+      password: hashedPassword 
+    });
+    
     await newUser.save();
     res.status(201).json({ message: "Đăng ký thành công!" });
   } catch (err) {
@@ -25,15 +40,34 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const cleanEmail = email.trim();
+
+    // Tìm email trong CSDL không phân biệt chữ hoa hay chữ thường
+    const user = await User.findOne({ 
+      email: { $regex: new RegExp(`^${cleanEmail}$`, 'i') } 
+    });
+    
     if (!user) return res.status(400).json({ error: "Email không tồn tại" });
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ error: "Sai mật khẩu" });
 
-    // JWT_SECRET lấy từ file .env (ví dụ: chuoi_ky_tu_bi_mat_cua_nhom_minh)
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'mastercd_secret', { expiresIn: '1d' });
-    res.json({ message: "Đăng nhập thành công", token, user: { name: user.name, email: user.email } });
+    const token = jwt.sign(
+      { id: user._id, role: user.role || 'customer' }, 
+      process.env.JWT_SECRET || 'mastercd_secret', 
+      { expiresIn: '1d' }
+    );
+
+    res.json({ 
+      message: "Đăng nhập thành công", 
+      token, 
+      user: { 
+        id: user._id,
+        name: user.name, 
+        email: user.email,
+        role: user.role || 'customer'
+      } 
+    });
   } catch (err) {
     res.status(500).json({ error: "Lỗi server khi đăng nhập" });
   }

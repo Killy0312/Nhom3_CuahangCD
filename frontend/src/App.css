@@ -550,9 +550,8 @@ body {
   from { transform: scaleX(1); }
   to { transform: scaleX(0); }
 }
-/* ================= CSS THÊM MỚI CHO TRANG CHỦ CHI TIẾT ================= */
 
-/* Section các tính năng cốt lõi */
+/* SECTION TÍNH NĂNG CỐT LÕI */
 .features-section {
   max-width: 1300px;
   margin: 0 auto;
@@ -591,7 +590,7 @@ body {
   line-height: 1.5;
 }
 
-/* Section sản phẩm bán chạy */
+/* SECTION SẢN PHẨM BÁN CHẠY */
 .best-sellers-section {
   max-width: 1300px;
   margin: 0 auto;
@@ -668,7 +667,6 @@ body {
   font-size: 15px;
 }
 
-/* Hỗ trợ Responsive co giãn tốt trên màn hình nhỏ */
 @media (max-width: 992px) {
   .features-grid, .home-products-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -678,4 +676,247 @@ body {
   .features-grid, .home-products-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ==========================================================================
+   ================= TỔNG HỢP CSS LIGHT MODE CHUẨN ĐỒNG BỘ 100% =================
+   ========================================================================== */
+
+body.light-mode {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* HEADER LIGHT MODE */
+body.light-mode .main-header {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03) !important;
+}
+
+body.light-mode .logo-modern {
+  color: #0f172a !important;
+}
+
+body.light-mode .accent-text {
+  color: #0284c7 !important;
+}
+
+body.light-mode .nav-links a {
+  color: #475569 !important;
+}
+
+body.light-mode .nav-links a:hover,
+body.light-mode .nav-links a.active {
+  color: #0284c7 !important;
+}
+
+body.light-mode .header-icons button {
+  color: #0f172a !important;
+}
+
+body.light-mode .btn-login {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* HERO BANNER LIGHT MODE */
+body.light-mode .hero-banner {
+  background: transparent !important;
+}
+
+body.light-mode .badge {
+  background-color: rgba(2, 132, 199, 0.1) !important;
+  color: #0284c7 !important;
+}
+
+body.light-mode .hero-content h1 {
+  color: #0f172a !important;
+}
+
+body.light-mode .hero-content p {
+  color: #475569 !important;
+}
+
+/* NÚT MUA SẮM NGAY */
+body.light-mode .btn-primary {
+  background-color: #0284c7 !important;
+  color: #ffffff !important;
+}
+
+body.light-mode .btn-primary:hover {
+  background-color: #0369a1 !important;
+}
+
+/* 🌟 KHẮC PHỤC TRIỆT ĐỂ NÚT "XEM BỘ SƯU TẬP" TRÊN LIGHT MODE */
+body.light-mode .btn-outline {
+  background-color: transparent !important;
+  color: #0f172a !important;
+  border: 2px solid #0f172a !important;
+}
+
+body.light-mode .btn-outline:hover {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+}
+
+/* VÒNG ĐĨA XOAY TRÊN HERO */
+body.light-mode .vinyl-placeholder {
+  background: radial-gradient(circle, #ffffff 0%, #e2e8f0 100%) !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* TÍNH NĂNG CỐT LÕI (4 Ô ĐẦU TRANG) */
+body.light-mode .feature-card {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03) !important;
+}
+
+body.light-mode .feature-card h4 {
+  color: #0f172a !important;
+}
+
+body.light-mode .feature-card p {
+  color: #64748b !important;
+}
+
+/* PHÂN LOẠI ĐỊNH DẠNG (VÒNG TRÒN CATEGORY) */
+body.light-mode .categories-section h2 {
+  color: #0f172a !important;
+}
+
+body.light-mode .category-img-circle {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-mode .category-img-circle:hover {
+  border-color: #0284c7 !important;
+}
+
+/* ĐĨA NHẠC BÁN CHẠY TUẦN NÀY (CARD SẢN PHẨM TRANG CHỦ) */
+body.light-mode .best-sellers-section h2,
+body.light-mode .new-release-section h2,
+body.light-mode .story-text h2 {
+  color: #0f172a !important;
+}
+
+body.light-mode .home-product-card {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04) !important;
+}
+
+body.light-mode .home-product-card:hover {
+  border-color: #0284c7 !important;
+  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.12) !important;
+}
+
+body.light-mode .home-img-wrapper {
+  background-color: #f1f5f9 !important;
+}
+
+body.light-mode .home-card-badge {
+  background-color: rgba(2, 132, 199, 0.1) !important;
+  border: 1px solid rgba(2, 132, 199, 0.3) !important;
+  color: #0284c7 !important;
+}
+
+body.light-mode .home-card-info h4 {
+  color: #0f172a !important;
+}
+
+body.light-mode .home-card-info p {
+  color: #64748b !important;
+}
+
+body.light-mode .home-card-price {
+  color: #0284c7 !important;
+}
+
+/* BẢN PHÁT HÀNH MỚI NHẤT & KHỐI CÂU CHUYỆN */
+body.light-mode .release-card,
+body.light-mode .story-img-placeholder {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-mode .story-text p {
+  color: #475569 !important;
+}
+
+/* DANH SÁCH BẢNG KHUNG TRANG CHỈ TIẾT & CÁC NỀN KHÁC */
+body.light-mode .product-card,
+body.light-mode .product-info,
+body.light-mode .store-text-card,
+body.light-mode .stat-item,
+body.light-mode .value-card,
+body.light-mode .store-contact-info-box,
+body.light-mode .profile-sidebar-card,
+body.light-mode .profile-form-card,
+body.light-mode .order-card,
+body.light-mode .admin-card-box,
+body.light-mode .admin-stat-card,
+body.light-mode .tracklist-container,
+body.light-mode .cart-item,
+body.light-mode .checkout-summary-section,
+body.light-mode .checkout-form-section {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04) !important;
+}
+
+body.light-mode input,
+body.light-mode select,
+body.light-mode textarea {
+  background-color: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+body.light-mode .dropdown-menu {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+}
+
+body.light-mode .dropdown-menu li {
+  color: #334155 !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+
+body.light-mode .dropdown-menu li:hover {
+  background-color: #f1f5f9 !important;
+  color: #0284c7 !important;
+}
+
+/* FOOTER LIGHT MODE */
+body.light-mode .modern-footer {
+  background-color: #ffffff !important;
+  border-top: 1px solid #e2e8f0 !important;
+}
+
+body.light-mode .footer-col h3,
+body.light-mode .footer-col h4,
+body.light-mode .footer-col li {
+  color: #0f172a !important;
+}
+
+body.light-mode .footer-col p,
+body.light-mode .text-gray-info,
+body.light-mode .footer-col a,
+body.light-mode .footer-bottom {
+  color: #64748b !important;
+}
+
+body.light-mode .footer-col a:hover {
+  color: #0284c7 !important;
+}
+
+body.light-mode .footer-grid {
+  border-bottom-color: #e2e8f0 !important;
 }

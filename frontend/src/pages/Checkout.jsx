@@ -1,179 +1,254 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Checkout.css';
-import Footer from '../components/Footer.jsx'; 
 import Header from '../components/Header.jsx';
+import Footer from '../components/Footer.jsx';
 
-function Checkout({ setCurrentPage, cart, clearCart }) {
-  const [paymentMethod, setPaymentMethod] = useState('cod');
+function Checkout({ setCurrentPage, cart = [], clearCart }) {
+  const [formData, setFormData] = useState({
+    fullName: '',
+    phone: '',
+    address: '',
+    note: '',
+    paymentMethod: 'COD'
+  });
 
-  // 💡 State xử lý thông báo nổi Toast thời thượng
-  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
-  const [toastTimer, setToastTimer] = useState(null);
+  const [toast, setToast] = useState({ show: false, message: '' });
 
-  const parsePrice = (priceStr) => parseInt(priceStr.replace(/\D/g, '')) || 0;
+  // TỰ ĐỘNG ĐỌC TẤT CẢ CÁC BIẾN PROFILE CÓ THỂ CÓ TỪ LOCALSTORAGE
+  useEffect(() => {
+    try {
+      const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
+      const storedName = localStorage.getItem('userName') || '';
+
+      const fullName = savedProfile.fullName || savedProfile.name || storedName || 'Phạm Gia Phú';
+      
+      const phone = savedProfile.phone || 
+                    savedProfile.phoneNumber || 
+                    savedProfile.phoneNum || 
+                    localStorage.getItem('userPhone') || '0862098350';
+
+      const address = savedProfile.address || 
+                      savedProfile.defaultAddress || 
+                      savedProfile.shippingAddress || 
+                      localStorage.getItem('userAddress') || '331 Quốc lộ 1A, P. An Phú Đông, Q.12, TP.HCM';
+
+      setFormData(prev => ({
+        ...prev,
+        fullName: fullName,
+        phone: phone,
+        address: address
+      }));
+    } catch (error) {
+      console.error("Lỗi đọc thông tin Profile:", error);
+    }
+  }, []);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const parsePrice = (priceStr) => {
+    if (typeof priceStr === 'number') return priceStr;
+    return parseInt(String(priceStr).replace(/\D/g, '')) || 0;
+  };
+
   const formatPrice = (num) => num.toLocaleString('vi-VN') + 'đ';
+
   const totalPrice = cart.reduce((total, item) => total + (parsePrice(item.price) * item.quantity), 0);
 
-  // 💡 Hàm gọi Toast Notification
-  const triggerToast = (msg, type = 'success') => {
-    if (toastTimer) clearTimeout(toastTimer);
-    setToast({ show: true, message: msg, type: type });
-    
-    const timer = setTimeout(() => {
-      setToast({ show: false, message: '', type: 'success' });
-    }, 3000);
-    setToastTimer(timer);
+  const triggerToast = (msg) => {
+    setToast({ show: true, message: msg });
+    setTimeout(() => setToast({ show: false, message: '' }), 3000);
   };
 
-  // 💡 Hàm gửi đơn hàng lên Backend cổng 5000 và kích hoạt trừ kho dữ liệu
-  const handlePlaceOrder = async (e) => {
-    e.preventDefault();
+  const handlePlaceOrder = (e) => {
+  e.preventDefault();
 
-    try {
-      const response = await fetch('http://localhost:5000/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cart: cart }) // Bắn nguyên cái giỏ hàng lên
-      });
+  if (!formData.fullName.trim() || !formData.phone.trim() || !formData.address.trim()) {
+    triggerToast("Vui lòng điền đầy đủ Họ tên, Số điện thoại và Địa chỉ giao hàng!");
+    return;
+  }
 
-      const data = await response.json();
+  // 👈 LẤY EMAIL CỦA TÀI KHOẢN ĐANG ĐĂNG NHẬP
+  const loggedInEmail = localStorage.getItem('userEmail') || '';
 
-      if (response.ok) {
-        // Bắn Toast thông báo thành công phát sáng mã đơn hàng xịn xò
-        triggerToast(`🎉 Đặt hàng thành công! Mã đơn hàng: #${data.orderId}`, "success");
-        
-        // Chờ 2 giây cho người dùng nhìn hiệu ứng rồi mới xóa giỏ và đá về trang chủ
-        setTimeout(() => {
-          clearCart();
-          setCurrentPage('home');
-        }, 2000);
-      } else {
-        // Nếu Backend báo lỗi không đủ hàng tồn kho, hiện Toast màu đỏ cảnh báo ngay
-        triggerToast(`⚠️ ${data.error}`, "error");
-      }
-    } catch (error) {
-      triggerToast("❌ Thất bại: Không thể kết nối tới máy chủ xử lý kho hàng Backend!", "error");
-    }
+  const newOrder = {
+    orderId: "HD" + Math.floor(100000 + Math.random() * 900000),
+    userEmail: loggedInEmail, // 👈 GẮN EMAIL NGƯỜI MUA VÀO ĐƠN HÀNG
+    createdAt: new Date().toISOString(),
+    customerName: formData.fullName,
+    phone: formData.phone,
+    address: formData.address,
+    note: formData.note,
+    paymentMethod: formData.paymentMethod,
+    items: cart,
+    totalAmount: totalPrice,
+    status: 'Đã xác nhận'
   };
+
+  try {
+    const existingOrders = JSON.parse(localStorage.getItem('userOrders')) || [];
+    localStorage.setItem('userOrders', JSON.stringify([newOrder, ...existingOrders]));
+  } catch (err) {
+    console.error("Lỗi lưu đơn hàng:", err);
+  }
+
+  triggerToast("Đặt hàng thành công! Đang chuyển đến Lịch sử đơn...");
+
+  setTimeout(() => {
+    clearCart();
+    setCurrentPage('order-history');
+  }, 1500);
+};
 
   return (
     <div className="app-container modern-theme">
-      
-      {/* ĐÃ SỬA: ĐỒNG BỘ AVATAR CHỮ PHÚ BẰNG COMPONENT DÙNG CHUNG */}
       <Header setCurrentPage={setCurrentPage} cart={cart} />
 
-      {/* KIỂM TRA GIỎ HÀNG */}
-      {cart.length === 0 ? (
-        <main className="checkout-main" style={{ textAlign: 'center', padding: '100px 20px', minHeight: '50vh' }}>
-          <h2>Không có dữ liệu thanh toán</h2>
-          <p style={{ color: '#94a3b8', marginTop: '10px' }}>Vui lòng thêm sản phẩm vào giỏ hàng trước khi tiến hành đặt hàng.</p>
-          <button 
-            className="btn-checkout" 
-            onClick={() => setCurrentPage('products')} 
-            style={{ width: '250px', margin: '30px auto 0 auto' }}
-          >
-            Quay lại Cửa hàng
-          </button>
-        </main>
-      ) : (
-        <main className="checkout-main">
-          <form className="checkout-layout" onSubmit={handlePlaceOrder}>
-            {/* CỘT TRÁI: ĐỊA CHỈ & PHƯƠNG THỨC */}
-            <div className="checkout-form-section">
-              <h2 className="section-title">1. Địa chỉ giao hàng</h2>
-              <div className="form-grid">
+      <main className="checkout-main">
+        <div className="checkout-layout">
+          
+          {/* CỘT TRÁI - FORM THÔNG TIN GIAO HÀNG */}
+          <div className="checkout-form-section">
+            <h2 className="section-title">1. Địa chỉ giao hàng</h2>
+            
+            <form onSubmit={handlePlaceOrder}>
+              <div className="form-row">
                 <div className="input-group">
                   <label>Họ và Tên *</label>
-                  <input type="text" required placeholder="Ví dụ: Phạm Gia Phú" />
+                  <input 
+                    type="text" 
+                    name="fullName" 
+                    placeholder="Ví dụ: Phạm Gia Phú" 
+                    value={formData.fullName} 
+                    onChange={handleChange} 
+                    required 
+                  />
                 </div>
+
                 <div className="input-group">
                   <label>Số điện thoại *</label>
-                  <input type="tel" required placeholder="Nhập số điện thoại liên hệ" />
+                  <input 
+                    type="text" 
+                    name="phone" 
+                    placeholder="Nhập số điện thoại liên hệ" 
+                    value={formData.phone} 
+                    onChange={handleChange} 
+                    required 
+                  />
                 </div>
-                <div className="input-group full-width">
-                  <label>Địa chỉ nhận hàng chi tiết *</label>
-                  <input type="text" required placeholder="Số nhà, Tên đường, Phường/Xã, Quận/Huyện, Tỉnh/TP" />
-                </div>
-                <div className="input-group full-width">
-                  <label>Ghi chú đơn hàng (Tùy chọn)</label>
-                  <textarea rows="3" placeholder="Ví dụ: Giao hàng giờ hành chính..."></textarea>
-                </div>
+              </div>
+
+              <div className="input-group">
+                <label>Địa chỉ nhận hàng chi tiết *</label>
+                <input 
+                  type="text" 
+                  name="address" 
+                  placeholder="Số nhà, Tên đường, Phường/Xã, Quận/Huyện, Tỉnh/TP" 
+                  value={formData.address} 
+                  onChange={handleChange} 
+                  required 
+                />
+              </div>
+
+              <div className="input-group">
+                <label>Ghi chú đơn hàng (Tùy chọn)</label>
+                <textarea 
+                  name="note" 
+                  rows="3" 
+                  placeholder="Ví dụ: Giao hàng giờ hành chính..." 
+                  value={formData.note} 
+                  onChange={handleChange}
+                ></textarea>
               </div>
 
               <h2 className="section-title mt-40">2. Phương thức thanh toán</h2>
               <div className="payment-methods">
-                <label className={`payment-option ${paymentMethod === 'cod' ? 'selected' : ''}`}>
-                  <input type="radio" name="payment" value="cod" checked={paymentMethod === 'cod'} onChange={(e) => setPaymentMethod(e.target.value)} />
-                  <span className="pay-icon">💵</span>
-                  Thanh toán tiền mặt khi nhận hàng (COD)
+                <label className={`payment-option ${formData.paymentMethod === 'COD' ? 'selected' : ''}`}>
+                  <input 
+                    type="radio" 
+                    name="paymentMethod" 
+                    value="COD" 
+                    checked={formData.paymentMethod === 'COD'} 
+                    onChange={handleChange} 
+                  />
+                  <span>Thanh toán tiền mặt khi nhận hàng (COD)</span>
                 </label>
 
-                <label className={`payment-option ${paymentMethod === 'vcb' ? 'selected' : ''}`}>
-                  <input type="radio" name="payment" value="vcb" checked={paymentMethod === 'vcb'} onChange={(e) => setPaymentMethod(e.target.value)} />
-                  <span className="pay-icon">🏦</span>
-                  Chuyển khoản Vietcombank
+                <label className={`payment-option ${formData.paymentMethod === 'Bank' ? 'selected' : ''}`}>
+                  <input 
+                    type="radio" 
+                    name="paymentMethod" 
+                    value="Bank" 
+                    checked={formData.paymentMethod === 'Bank'} 
+                    onChange={handleChange} 
+                  />
+                  <span>Chuyển khoản Vietcombank</span>
                 </label>
 
-                <label className={`payment-option ${paymentMethod === 'momo' ? 'selected' : ''}`}>
-                  <input type="radio" name="payment" value="momo" checked={paymentMethod === 'momo'} onChange={(e) => setPaymentMethod(e.target.value)} />
-                  <span className="pay-icon">🟣</span>
-                  Ví điện tử MoMo
+                <label className={`payment-option ${formData.paymentMethod === 'MoMo' ? 'selected' : ''}`}>
+                  <input 
+                    type="radio" 
+                    name="paymentMethod" 
+                    value="MoMo" 
+                    checked={formData.paymentMethod === 'MoMo'} 
+                    onChange={handleChange} 
+                  />
+                  <span>Ví điện tử MoMo</span>
                 </label>
               </div>
+            </form>
+          </div>
 
-              {/* HIỂN THỊ MÃ QR CODE DỰA TRÊN LỰA CHỌN */}
-              {paymentMethod !== 'cod' && (
-                <div className="qr-code-box">
-                  <h3>Quét mã QR để thanh toán</h3>
-                  <img 
-                    src={paymentMethod === 'vcb' 
-                      ? "https://api.vietqr.io/image/970436-00000000000-q0sU9iQ.jpg?accountName=MASTER+CD&amount=" + totalPrice
-                      : "https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
-                    } 
-                    alt="QR Code" 
-                    className="qr-img" 
-                  />
-                  <p>Nội dung CK: <strong>MCD - [SĐT của bạn]</strong></p>
-                  <p className="qr-hint">Hệ thống sẽ tự động xác nhận đơn hàng sau khi nhận được thanh toán.</p>
+          {/* CỘT PHẢI - TÓM TẮT ĐƠN HÀNG & NÚT XÁC NHẬN */}
+          <div className="checkout-summary-section">
+            <h2 className="section-title">Đơn hàng của bạn</h2>
+
+            <div className="checkout-items">
+              {cart.map((item, idx) => (
+                <div key={item._id || item.id || idx} className="checkout-item">
+                  <img src={item.img} alt={item.name} className="checkout-item-img" />
+                  <div className="checkout-item-info">
+                    <h4>{item.name}</h4>
+                    <span>SL: {item.quantity}</span>
+                  </div>
+                  <span className="checkout-item-price">
+                    {formatPrice(parsePrice(item.price) * item.quantity)}
+                  </span>
                 </div>
-              )}
+              ))}
             </div>
 
-            {/* CỘT PHẢI: CHI TIẾT ĐƠN HÀNG */}
-            <div className="checkout-summary-section">
-              <h2 className="section-title">Đơn hàng của bạn</h2>
-              <div className="checkout-items">
-                {cart.map(item => (
-                  <div className="checkout-item" key={item.id || item._id}>
-                    <img src={item.img} alt={item.name} />
-                    <div className="checkout-item-info">
-                      <h4>{item.name}</h4>
-                      <span>SL: {item.quantity}</span>
-                    </div>
-                    <div className="checkout-item-price">
-                      {formatPrice(parsePrice(item.price) * item.quantity)}
-                    </div>
-                  </div>
-                ))}
+            <div className="summary-pricing-box">
+              <div className="summary-row">
+                <span>Tạm tính:</span>
+                <span>{formatPrice(totalPrice)}</span>
+              </div>
+              <div className="summary-row">
+                <span>Phí vận chuyển:</span>
+                <span>Miễn phí</span>
               </div>
               <hr className="summary-divider" />
-              <div className="summary-row"><span>Tạm tính:</span><span>{formatPrice(totalPrice)}</span></div>
-              <div className="summary-row"><span>Phí vận chuyển:</span><span>Miễn phí</span></div>
-              <div className="summary-row total mt-20">
-                <span>Thành tiền:</span><span className="accent-text">{formatPrice(totalPrice)}</span>
+              <div className="summary-row total">
+                <span>Thành tiền:</span>
+                <span className="accent-text">{formatPrice(totalPrice)}</span>
               </div>
-              
-              <button type="submit" className="btn-place-order">XÁC NHẬN ĐẶT HÀNG</button>
-              <button type="button" className="btn-back-cart" onClick={() => setCurrentPage('cart')}>Quay lại giỏ hàng</button>
             </div>
-          </form>
-        </main>
-      )}
 
-      {/* 💡 THÀNH PHẦN TOAST NOTIFICATION CHO TRANG CHECKOUT */}
-      <div className={`toast-notification ${toast.type} ${toast.show ? 'show' : ''}`}>
+            <button type="button" className="btn-place-order" onClick={handlePlaceOrder}>
+              XÁC NHẬN ĐẶT HÀNG
+            </button>
+
+            <button type="button" className="btn-back-cart" onClick={() => setCurrentPage('cart')}>
+              Quay lại giỏ hàng
+            </button>
+          </div>
+
+        </div>
+      </main>
+
+      <div className={`toast-notification ${toast.show ? 'show' : ''}`}>
         <div className="toast-content">
-          <span className="toast-icon">{toast.type === 'success' ? '🎉' : '⚠️'}</span>
           <span className="toast-text">{toast.message}</span>
         </div>
         <div className="toast-progress-bar"></div>

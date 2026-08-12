@@ -14,41 +14,56 @@ function Products({ setCurrentPage, addToCart, cart }) {
   const [isFormatOpen, setIsFormatOpen] = useState(true);
   const [isGenreOpen, setIsGenreOpen] = useState(true);
   
-  // 💡 State xử lý thông báo nổi (Toast Notification)
   const [toast, setToast] = useState({ show: false, message: '' });
   const [toastTimer, setToastTimer] = useState(null);
   
   const itemsPerPage = 12;
   const genresList = ['Tất cả', 'Rock', 'Metal', 'Ambient', 'Jazz', 'Pop', 'Electronic'];
 
+  // 🔥 HÀM TỰ ĐỘNG CHUYỂN SỐ THÔ THÀNH DẠNG 32.000.000đ
+  const formatPriceDisplay = (priceVal) => {
+    if (!priceVal) return '0đ';
+    const str = String(priceVal).trim();
+    if (str.endsWith('đ') && str.includes('.')) return str; // Đã đúng định dạng
+    const num = parseInt(str.replace(/\D/g, '')) || 0;
+    return num.toLocaleString('vi-VN') + 'đ';
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/products');
+        let apiProducts = [];
         if (response.ok) {
-          const data = await response.json();
-          setProducts(data); 
-        } else {
-          console.error("Lỗi khi tải dữ liệu từ Server");
+          apiProducts = await response.json();
         }
+
+        const localCustoms = JSON.parse(localStorage.getItem('customProducts')) || [];
+
+        const mergedProducts = [
+          ...localCustoms,
+          ...apiProducts.filter(apiItem => 
+            !localCustoms.some(localItem => (localItem._id || localItem.id) === (apiItem._id || apiItem.id))
+          )
+        ];
+
+        setProducts(mergedProducts);
       } catch (error) {
-        console.error("Mất kết nối tới Backend:", error);
+        console.error("Lỗi tải sản phẩm:", error);
+        const localCustoms = JSON.parse(localStorage.getItem('customProducts')) || [];
+        setProducts(localCustoms);
       } finally {
         setIsLoading(false);
       }
     };
+
     fetchProducts();
   }, []); 
 
-  // 💡 Hàm kích hoạt hiện Toast thông minh (Chặn trùng lặp nếu click nhanh)
   const triggerToast = (msg) => {
     if (toastTimer) clearTimeout(toastTimer);
-    
     setToast({ show: true, message: msg });
-    
-    const timer = setTimeout(() => {
-      setToast({ show: false, message: '' });
-    }, 3000); // 3 giây tự tắt
+    const timer = setTimeout(() => setToast({ show: false, message: '' }), 3000);
     setToastTimer(timer);
   };
 
@@ -76,23 +91,18 @@ function Products({ setCurrentPage, addToCart, cart }) {
 
   return (
     <div className="app-container modern-theme">
-      
       <Header setCurrentPage={setCurrentPage} cart={cart} />
 
-      {/* BANNER SẢN PHẨM */}
       <section className="products-banner">
         <h1>Khám phá <span className="accent-text">Kho tàng âm nhạc</span></h1>
         <p>Bộ sưu tập đĩa CD, Vinyl và Cassette chất lượng cao được tuyển chọn khắt khe.</p>
       </section>
 
-      {/* BỐ CỤC CHÍNH CHIA LÀM 2 CỘT */}
       <main className="products-layout-container">
-        
-        {/* ================= CỘT TRÁI: SIDEBAR BỘ LỌC ================= */}
         <aside className="products-sidebar">
           <div className="sidebar-filter-group">
             <h3 onClick={() => setIsFormatOpen(!isFormatOpen)} className="sidebar-toggle-title">
-              <span>💿 Định dạng đĩa</span>
+              <span>Định dạng đĩa</span>
               <span className={`arrow-icon ${isFormatOpen ? 'open' : ''}`}>▼</span>
             </h3>
             {isFormatOpen && (
@@ -112,7 +122,7 @@ function Products({ setCurrentPage, addToCart, cart }) {
 
           <div className="sidebar-filter-group">
             <h3 onClick={() => setIsGenreOpen(!isGenreOpen)} className="sidebar-toggle-title">
-              <span>🎸 Thể loại / Dòng nhạc</span>
+              <span>Thể loại / Dòng nhạc</span>
               <span className={`arrow-icon ${isGenreOpen ? 'open' : ''}`}>▼</span>
             </h3>
             {isGenreOpen && (
@@ -131,11 +141,10 @@ function Products({ setCurrentPage, addToCart, cart }) {
           </div>
         </aside>
 
-        {/* ================= CỘT PHẢI: GRID SẢN PHẨM ================= */}
         <section className="products-content-right">
           {isLoading ? (
             <div className="loading-container" style={{ textAlign: 'center', padding: '50px', color: '#00e5ff' }}>
-              <h2>Đang tải kho nhạc từ Server... 🎧</h2>
+              <h2>Đang tải kho nhạc từ Server...</h2>
             </div>
           ) : (
             <>
@@ -153,16 +162,27 @@ function Products({ setCurrentPage, addToCart, cart }) {
                         onError={(e) => { e.target.src = 'https://via.placeholder.com/300x300/1e222a/475569?text=MasterCD' }} 
                       />
                       <span className="product-category-tag">{product.category}</span>
-                      {product.genre && <span className="product-genre-tag">{product.genre}</span>}
+                      {product.genre && product.genre !== 'Thiết bị' && (
+                        <span className="product-genre-tag">{product.genre}</span>
+                      )}
                       
                       <div className="product-overlay">
                         <button 
                           className="btn-add-to-cart" 
                           onClick={(e) => { 
                             e.stopPropagation(); 
-                            addToCart(product); 
-                            // 💡 Thay thế hàm alert thô sơ bằng hàm thông báo xịn
-                            triggerToast(`Đã thêm "${product.name}" vào giỏ hàng thành công!`); 
+                            
+                            const token = localStorage.getItem('token');
+                            if (!token) {
+                              triggerToast("Bạn cần đăng nhập tài khoản để mua sắm!");
+                              setTimeout(() => setCurrentPage('login'), 1200);
+                              return;
+                            }
+
+                            const success = addToCart(product); 
+                            if (success) {
+                              triggerToast(`Đã thêm "${product.name}" vào giỏ hàng thành công!`); 
+                            }
                           }}
                         >
                           Thêm vào giỏ
@@ -180,7 +200,8 @@ function Products({ setCurrentPage, addToCart, cart }) {
                       </h3>
                       <p className="product-artist">{product.artist}</p>
                       <div className="product-bottom">
-                        <span className="product-price">{product.price}</span>
+                        {/* 🔥 HIỂN THỊ GIÁ ĐÃ DỌN ĐỊNH DẠNG CHUẨN ĐẸP */}
+                        <span className="product-price">{formatPriceDisplay(product.price)}</span>
                       </div>
                     </div>
                   </div>
@@ -220,7 +241,7 @@ function Products({ setCurrentPage, addToCart, cart }) {
 
               {filteredProducts.length === 0 && (
                 <div className="no-products" style={{ textAlign: 'center', padding: '100px 0', color: '#94a3b8' }}>
-                  <p style={{ fontSize: '18px' }}>Chưa có sản phẩm nào thuộc thể loại này trong kho 🛒</p>
+                  <p style={{ fontSize: '18px' }}>Chưa có sản phẩm nào thuộc mục này trong kho hàng.</p>
                 </div>
               )}
             </>
@@ -228,10 +249,8 @@ function Products({ setCurrentPage, addToCart, cart }) {
         </section>
       </main>
 
-      {/* 💡 THÀNH PHẦN TOAST NOTIFICATION ĐƯỢC ĐẶT Ở ĐÂY */}
       <div className={`toast-notification ${toast.show ? 'show' : ''}`}>
         <div className="toast-content">
-          <span className="toast-icon">🛒</span>
           <span className="toast-text">{toast.message}</span>
         </div>
         <div className="toast-progress-bar"></div>

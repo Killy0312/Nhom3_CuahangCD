@@ -7,13 +7,12 @@ function PaymentInfo({ setCurrentPage, cart = [] }) {
   return (
     <div className="app-container modern-theme">
       
-      {/* THAY THẾ TOÀN BỘ CODE HEADER CŨ BẰNG 1 DÒNG GỌI COMPONENT NÀY */}
       <Header setCurrentPage={setCurrentPage} cart={cart} />
 
-      {/* NỘI DUNG CHÍNH */}
       <main className="payment-info-main">
         <h1 className="page-title">Hướng dẫn thanh toán mua hàng tại <span className="accent-text">MasterCD</span></h1>
         
+        {/* HƯỚNG DẪN CÁC BƯỚC MUA HÀNG */}
         <div className="guide-steps">
           <div className="step-card">
             <h3>Bước 1: Chọn sản phẩm</h3>
@@ -35,29 +34,75 @@ function PaymentInfo({ setCurrentPage, cart = [] }) {
             <p>MasterCD hỗ trợ 3 hình thức thanh toán chính:</p>
             <ul>
               <li><strong>Thanh toán tiền mặt (COD):</strong> Trả tiền cho shipper khi nhận được hàng.</li>
-              <li><strong>Chuyển khoản Vietcombank / MoMo:</strong> Quét mã QR hiện ra trên màn hình. Nhớ ghi đúng nội dung chuyển khoản là: <code>MCD - [Số điện thoại của bạn]</code>.</li>
+              <li><strong>Chuyển khoản Vietcombank / MoMo:</strong> Quét mã QR hiện trên màn hình hoặc bên dưới. Nhớ ghi đúng nội dung chuyển khoản là: <code>MCD - [Số điện thoại của bạn]</code>.</li>
             </ul>
-            <p>Sau khi hoàn tất, bấm <strong>"Xác nhận đặt hàng"</strong>.</p>
+            <p style={{ marginTop: '10px' }}>Sau khi hoàn tất, bấm <strong>"Xác nhận đặt hàng"</strong>.</p>
           </div>
         </div>
 
+        {/* THÔNG TIN TÀI KHOẢN KÈM MÃ QR THỰC TẾ */}
         <div className="bank-accounts-section">
-          <h2>Thông tin tài khoản ngân hàng chính thức</h2>
-          <p className="warning-text">Lưu ý: Chúng tôi chỉ sử dụng các tài khoản dưới đây để nhận thanh toán. Vui lòng kiểm tra kỹ tên chủ tài khoản trước khi chuyển khoản.</p>
+          <h2>Thông tin tài khoản nhận thanh toán chính thức</h2>
+          <p className="warning-text">⚠️ Lưu ý: Chúng tôi chỉ sử dụng các tài khoản dưới đây để nhận thanh toán. Vui lòng kiểm tra kỹ tên chủ tài khoản <strong>PHAM GIA PHU</strong> trước khi chuyển khoản.</p>
           
           <div className="bank-grid">
-            <div className="bank-card">
-              <div className="bank-name">🏦 Ngân hàng Vietcombank</div>
-              <p>Số tài khoản: <strong>00000000000</strong></p>
-              <p>Chủ tài khoản: <strong>PHAM GIA PHU</strong></p>
-              <p>Chi nhánh: <strong>TP. Hồ Chí Minh</strong></p>
+            
+            {/* TÀI KHOẢN VIETCOMBANK */}
+            <div className="bank-card vcb-card">
+              <div className="bank-card-header">
+                <div className="bank-name">🏦 Ngân hàng Vietcombank</div>
+                <span className="badge-network">VietQR / Napas247</span>
+              </div>
+              
+              <div className="bank-card-content">
+                <div className="bank-info-group">
+                  <p className="info-row"><span className="label">Số tài khoản:</span> <strong className="highlight-stk">9862098350</strong></p>
+                  <p className="info-row"><span className="label">Chủ tài khoản:</span> <strong>PHAM GIA PHU</strong></p>
+                  <p className="info-row"><span className="label">Ngân hàng:</span> <strong>Vietcombank (VCB)</strong></p>
+                </div>
+
+                <div className="qr-container">
+                  <div className="qr-box">
+                    <img 
+                      src="/images/vcb-qr.jpg" 
+                      alt="Mã QR Vietcombank Pham Gia Phu" 
+                      className="qr-image"
+                      onError={(e) => { e.target.src = 'https://via.placeholder.com/220x300/1e222a/00e5ff?text=Vietcombank+QR'; }}
+                    />
+                  </div>
+                  <span className="qr-caption">Scan mã VietQR Vietcombank</span>
+                </div>
+              </div>
             </div>
             
-            <div className="bank-card">
-              <div className="bank-name">🟣 Ví điện tử MoMo</div>
-              <p>Số điện thoại: <strong>0862098350</strong></p>
-              <p>Chủ tài khoản: <strong>PHAM GIA PHU</strong></p>
+            {/* VÍ ĐIỆN TỬ MOMO */}
+            <div className="bank-card momo-card">
+              <div className="bank-card-header">
+                <div className="bank-name momo-title">🟣 Ví điện tử MoMo</div>
+                <span className="badge-network momo-badge">MoMo Pay</span>
+              </div>
+
+              <div className="bank-card-content">
+                <div className="bank-info-group">
+                  <p className="info-row"><span className="label">Số điện thoại:</span> <strong className="highlight-stk momo-text">0862098350</strong></p>
+                  <p className="info-row"><span className="label">Chủ tài khoản:</span> <strong>PHAM GIA PHU</strong></p>
+                  <p className="info-row"><span className="label">Dịch vụ:</span> <strong>Ví MoMo / Chuyển tiền nhanh</strong></p>
+                </div>
+
+                <div className="qr-container">
+                  <div className="qr-box momo-qr-border">
+                    <img 
+                      src="/images/momo-qr.jpg" 
+                      alt="Mã QR MoMo Pham Gia Phu" 
+                      className="qr-image"
+                      onError={(e) => { e.target.src = 'https://via.placeholder.com/220x300/1e222a/d946ef?text=MoMo+QR'; }}
+                    />
+                  </div>
+                  <span className="qr-caption momo-caption">Scan mã QR Ví MoMo</span>
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
       </main>

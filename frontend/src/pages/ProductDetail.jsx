@@ -16,7 +16,15 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
     );
   }
 
-  // Hàm kích hoạt Toast nổi
+  // 🔥 HÀM TỰ ĐỘNG ĐỊNH DẠNG GIÁ TIỀN ĐẸP 32.000.000đ
+  const formatPriceDisplay = (priceVal) => {
+    if (!priceVal) return '0đ';
+    const str = String(priceVal).trim();
+    if (str.endsWith('đ') && str.includes('.')) return str;
+    const num = parseInt(str.replace(/\D/g, '')) || 0;
+    return num.toLocaleString('vi-VN') + 'đ';
+  };
+
   const triggerToast = (msg) => {
     if (toastTimer) clearTimeout(toastTimer);
     setToast({ show: true, message: msg });
@@ -24,7 +32,6 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
     setToastTimer(timer);
   };
 
-  // 1. Danh sách bài hát cho Album LUX - ROSALÍA
   const luxTracklist = [
     { id: 1, title: "Sexo, Violencia y Llantas", artist: "ROSALÍA", duration: "2:20" },
     { id: 2, title: "Reliquia", artist: "ROSALÍA", duration: "3:50" },
@@ -43,7 +50,6 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
     { id: 15, title: "Magnolias", artist: "ROSALÍA", duration: "3:14" },
   ];
 
-  // 2. Danh sách bài hát cho Album Music Has The Right to the children
   const boardsOfCanadaTracklist = [
     { id: 1, title: "Wildlife Analysis", artist: "Boards of Canada", duration: "1:15" },
     { id: 2, title: "An Eagle in Your Mind", artist: "Boards of Canada", duration: "6:25" },
@@ -64,7 +70,6 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
     { id: 17, title: "One Very Important Thought", artist: "Boards of Canada", duration: "1:25" },
   ];
 
-  // 3. Danh sách bài hát cho Album Let God Sort Em Out
   const clipseTracklist = [
     { id: 1, title: "The Birds Don't Sing", artist: "Clipse, John Legend, Voices of Fire", duration: "4:00" },
     { id: 2, title: "Chains & Whips", artist: "Clipse, Kendrick Lamar", duration: "4:03" },
@@ -81,7 +86,6 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
     { id: 13, title: "By the Grace of God", artist: "Clipse, Pharrell Williams", duration: "3:06" },
   ];
 
-  // 4. Danh sách bài hát cho Album Willoughby Tucker, I'll Always Love You
   const ethelCainTracklist = [
     { id: 1, title: "Janie", artist: "Ethel Cain", duration: "5:00" },
     { id: 2, title: "Willoughby's Theme", artist: "Ethel Cain", duration: "4:44" },
@@ -95,7 +99,6 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
     { id: 10, title: "Waco, Texas", artist: "Ethel Cain", duration: "15:15" },
   ];
 
-  // 5. Danh sách bài hát cho Album moisturizer
   const wetLegTracklist = [
     { id: 1, title: "CPR", artist: "Wet Leg", duration: "2:50" },
     { id: 2, title: "Liquidize", artist: "Wet Leg", duration: "2:27" },
@@ -111,7 +114,6 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
     { id: 12, title: "U and Me at Home", artist: "Wet Leg", duration: "4:01" },
   ];
 
-  // 6. Danh sách bài hát cho Album Neon Grey Midnight Green
   const nekoCaseTracklist = [
     { id: 1, title: "Destination", artist: "Neko Case", duration: "5:48" },
     { id: 2, title: "Tomboy Gold", artist: "Neko Case", duration: "1:46" },
@@ -127,7 +129,6 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
     { id: 12, title: "Match-Lit", artist: "Neko Case", duration: "5:47" },
   ];
 
-  // 7. Danh sách bài hát cho Album Minh Tinh
   const vanMaiHuongTracklist = [
     { id: 1, title: "Đại Minh Tinh", artist: "Văn Mai Hương, Hứa Kim Tuyền", duration: "4:07" },
     { id: 2, title: "Martini", artist: "Văn Mai Hương, Hứa Kim Tuyền", duration: "3:20" },
@@ -164,7 +165,6 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
     { label: "Đổi trả", value: "1-đổi-1 trong 7 ngày nếu có lỗi NSX" },
   ];
 
-  // 💡 HÀM ĐỔ MÔ TẢ ĐỘNG THAY THẾ DÒNG CHỮ QUÊ MÙA CŨ
   const generateDescription = () => {
     if (product.category === 'Thiết bị nghe') {
       return `Thiết bị đầu phát ${product.name} cao cấp đến từ hãng kỹ nghệ âm thanh danh tiếng ${product.artist}. Được chế tác tinh xảo nhằm tối ưu hóa công suất khai thác dải động kỹ thuật số, giảm thiểu tối đa hiện tượng nhiễu nền jitter, mang lại chất âm Hi-Fi chuẩn mực phòng thu cho căn phòng của bạn.`;
@@ -176,7 +176,6 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
   return (
     <div className="app-container modern-theme">
       
-      {/* ĐÃ THAY THẾ: GỌI HEADER CHUNG ĐỂ ĐỒNG BỘ AVATAR */}
       <Header setCurrentPage={setCurrentPage} cart={cart} />
 
       <main className="product-detail-main">
@@ -185,7 +184,6 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
         </button>
 
         <div className="detail-layout">
-          {/* CỘT TRÁI: Hình ảnh */}
           <div className="detail-image-section">
             <img 
               src={product.img} 
@@ -195,46 +193,66 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
             />
           </div>
 
-          {/* CỘT PHẢI: Thông tin & Đặt hàng */}
           <div className="detail-info-section">
             <div className="detail-meta-row">
               <span className="detail-category">{product.category}</span>
-              {product.genre && <span className="detail-genre-tag">{product.genre}</span>}
+              {/* 🔥 BỎ THẺ THỂ LOẠI "THIẾT BỊ" THỪA KHI VÀO THIẾT BỊ NGHE */}
+              {product.genre && product.genre !== 'Thiết bị' && (
+                <span className="detail-genre-tag">{product.genre}</span>
+              )}
             </div>
             
             <h1 className="detail-title">{product.name}</h1>
             <p className="detail-artist">{product.artist}</p>
             
             <div className="detail-price-box">
-              <span className="detail-price">{product.price}</span>
+              {/* 🔥 HIỂN THỊ GIÁ ĐÃ FORMAT 32.000.000đ CHUẨN ĐẮT */}
+              <span className="detail-price">{formatPriceDisplay(product.price)}</span>
               <span className="detail-status">Tình trạng: <span className="text-green">Còn hàng ({product.stock || 20} sản phẩm)</span></span>
             </div>
 
-            {/* SỬ DỤNG HÀM BIẾN ĐỔI MÔ TẢ ĐỘNG */}
             <p className="detail-description">{generateDescription()}</p>
 
             <div className="detail-actions">
               <button 
                 className="btn-add-to-cart-large"
                 onClick={() => {
-                  addToCart(product);
-                  triggerToast(`Đã thêm "${product.name}" vào giỏ hàng thành công!`);
+                  const token = localStorage.getItem('token');
+                  if (!token) {
+                    triggerToast("Bạn cần đăng nhập tài khoản để mua sắm!");
+                    setTimeout(() => setCurrentPage('login'), 1200);
+                    return;
+                  }
+
+                  const success = addToCart(product);
+                  if (success) {
+                    triggerToast(`Đã thêm "${product.name}" vào giỏ hàng thành công!`);
+                  }
                 }}
               >
                 THÊM VÀO GIỎ HÀNG
               </button>
+
               <button 
                 className="btn-buy-now"
                 onClick={() => {
-                  addToCart(product);
-                  setCurrentPage('checkout');
+                  const token = localStorage.getItem('token');
+                  if (!token) {
+                    triggerToast("Bạn cần đăng nhập tài khoản để mua sắm!");
+                    setTimeout(() => setCurrentPage('login'), 1200);
+                    return;
+                  }
+
+                  const success = addToCart(product);
+                  if (success) {
+                    setCurrentPage('checkout');
+                  }
                 }}
               >
                 MUA NGAY
               </button>
             </div>
 
-            {/* KHU VỰC DANH SÁCH BÀI HÁT / THÔNG SỐ */}
             <div className="tracklist-container">
               <div className="tracklist-header">
                 {product.category !== 'Thiết bị nghe' ? (
@@ -248,7 +266,6 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
                 )}
               </div>
               
-              {/* 💡 THÊM LỚP BỌC SCROLL-BOX ĐỂ GIỚI HẠN CHIỀU CAO DANH SÁCH */}
               <div className="tracklist-scroll-box">
                 <ul className="tracklist-list">
                   {product.category !== 'Thiết bị nghe' ? (
@@ -280,10 +297,9 @@ function ProductDetail({ setCurrentPage, product, addToCart, cart = [] }) {
         </div>
       </main>
 
-      {/* TOAST NOTIFICATION PHÁT SÁNG CYAN GÓC PHẢI */}
       <div className={`toast-notification ${toast.show ? 'show' : ''}`}>
         <div className="toast-content">
-          <span className="toast-icon">🛒</span>
+          <span className="toast-icon"></span>
           <span className="toast-text">{toast.message}</span>
         </div>
         <div className="toast-progress-bar"></div>

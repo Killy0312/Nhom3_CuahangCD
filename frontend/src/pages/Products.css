@@ -27,7 +27,7 @@
   align-items: flex-start;
 }
 
-/* ================= CỘT TRÁI: SIDEBAR BỘ LỌC CUỘN ĐỘC LẬP ================= */
+/* ================= CỘT TRÁI: SIDEBAR BỘ LỌC ================= */
 .products-sidebar {
   flex: 0 0 260px;
   background-color: #14171c;
@@ -53,10 +53,6 @@
   border-radius: 10px;
 }
 
-.products-sidebar::-webkit-scrollbar-thumb:hover {
-  background-color: #00e5ff;
-}
-
 .sidebar-filter-group {
   margin-bottom: 30px;
 }
@@ -68,7 +64,7 @@
 .sidebar-toggle-title {
   color: #00e5ff;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 16px;
   border-bottom: 1px solid rgba(0, 229, 255, 0.1);
   padding-bottom: 8px;
@@ -131,16 +127,13 @@
   gap: 30px;
 }
 
-/* ================= THẺ SẢN PHẨM (PRODUCT CARD) ================= */
+/* ================= THẺ SẢN PHẨM ================= */
 .product-card {
   background-color: #14171c;
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid #1e222a;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    border-color 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .product-card:hover {
@@ -172,7 +165,6 @@
   top: 12px;
   left: 12px;
   background-color: rgba(15, 17, 21, 0.8);
-  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   color: #00e5ff;
   padding: 4px 10px;
@@ -200,10 +192,7 @@
 
 .product-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: flex-end;
@@ -228,17 +217,11 @@
   font-size: 14px;
   cursor: pointer;
   transform: translateY(20px);
-  transition:
-    transform 0.3s ease,
-    background-color 0.3s ease;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .product-card:hover .btn-add-to-cart {
   transform: translateY(0);
-}
-
-.btn-add-to-cart:hover {
-  background-color: #fff;
 }
 
 .product-info {
@@ -272,13 +255,6 @@
   font-size: 16px;
 }
 
-.no-products {
-  text-align: center;
-  padding: 80px 0;
-  color: #94a3b8;
-  font-size: 16px;
-}
-
 /* ================= PHÂN TRANG ================= */
 .pagination-container {
   display: flex;
@@ -304,110 +280,165 @@
   transition: all 0.3s ease;
 }
 
-.page-btn:hover:not(:disabled) {
-  border-color: #00e5ff;
-  color: #fff;
-  transform: translateY(-2px);
-}
-
 .page-btn.active {
   background-color: #00e5ff;
   color: #000;
   border-color: #00e5ff;
-  box-shadow: 0 4px 15px rgba(0, 229, 255, 0.4);
 }
 
-.page-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  background-color: transparent;
-}
-
-/* ================= 💡 TOAST NOTIFICATION MODERNIZE ================= */
+/* ================= TOAST NOTIFICATION ================= */
 .toast-notification {
   position: fixed;
   bottom: 30px;
   right: 30px;
   background-color: #161920;
   border: 1px solid #232731;
-  border-left: 4px solid #00e5ff; /* Viền trái màu Cyan đặc trưng */
+  border-left: 4px solid #00e5ff;
   border-radius: 8px;
   padding: 16px 24px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 229, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   z-index: 9999;
-  
-  /* Trạng thái mặc định: Ẩn và đẩy sang phải */
   transform: translateX(150%);
   opacity: 0;
-  pointer-events: none;
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.25), opacity 0.3s ease;
+  transition: transform 0.4s ease, opacity 0.3s ease;
 }
 
-/* Khi có class show: Trượt vào mượt mà */
 .toast-notification.show {
   transform: translateX(0);
   opacity: 1;
-  pointer-events: auto;
-}
-
-.toast-content {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.toast-icon {
-  font-size: 18px;
 }
 
 .toast-text {
   color: #fff;
   font-size: 14px;
-  font-weight: 500;
 }
 
-/* Thanh chạy thời gian chạy ngầm bên dưới tấm thẻ thông báo */
-.toast-progress-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 3px;
-  width: 100%;
-  background: linear-gradient(to right, #0077ff, #00e5ff);
-  transform-origin: left;
-  transform: scaleX(0);
+/* ==========================================================================
+   ================= FIX TRIỆT ĐỂ LIGHT MODE CHO TRANG SẢN PHẨM =================
+   ========================================================================== */
+
+body.light-mode .products-banner {
+  background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%) !important;
+  border-bottom: 1px solid #e2e8f0 !important;
 }
 
-.toast-notification.show .toast-progress-bar {
-  animation: toastProgress 3s linear forwards;
+body.light-mode .products-banner h1 {
+  color: #0f172a !important;
 }
 
-@keyframes toastProgress {
-  from { transform: scaleX(1); }
-  to { transform: scaleX(0); }
+body.light-mode .products-banner p {
+  color: #475569 !important;
 }
 
-/* RESPONSIVE HỖ TRỢ MOBILE */
-@media (max-width: 992px) {
-  .products-layout-container {
-    flex-direction: column;
-    padding: 20px;
-  }
-  .products-sidebar {
-    flex: 1 1 100%;
-    width: 100%;
-    position: relative;
-    top: 0;
-    margin-bottom: 20px;
-    max-height: none;
-  }
-  .toast-notification {
-    bottom: 20px;
-    right: 20px;
-    left: 20px;
-    transform: translateY(150%);
-  }
-  .toast-notification.show {
-    transform: translateY(0);
-  }
+/* SIDEBAR BỘ LỌC CỘT TRÁI */
+body.light-mode .products-sidebar {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-mode .sidebar-toggle-title {
+  color: #0f172a !important;
+  border-bottom: 2px solid #e2e8f0 !important;
+}
+
+body.light-mode .arrow-icon {
+  color: #475569 !important;
+}
+
+body.light-mode .sidebar-filter-list li {
+  color: #334155 !important;
+  font-weight: 600 !important;
+}
+
+body.light-mode .sidebar-filter-list li:hover {
+  background-color: #f1f5f9 !important;
+  color: #0284c7 !important;
+}
+
+body.light-mode .sidebar-filter-list li.active {
+  background-color: #0284c7 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border-radius: 6px !important;
+}
+
+/* THẺ SẢN PHẨM TRONG LIGHT MODE */
+body.light-mode .product-card {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04) !important;
+}
+
+body.light-mode .product-card:hover {
+  border-color: #0284c7 !important;
+  box-shadow: 0 10px 25px rgba(2, 132, 199, 0.15) !important;
+}
+
+body.light-mode .product-img-wrapper {
+  background-color: #f8fafc !important;
+}
+
+body.light-mode .product-category-tag {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+}
+
+body.light-mode .product-genre-tag {
+  background-color: rgba(15, 23, 42, 0.85) !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+body.light-mode .product-title {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+body.light-mode .product-artist {
+  color: #64748b !important;
+}
+
+body.light-mode .product-price {
+  color: #0284c7 !important;
+  font-weight: 800 !important;
+}
+
+body.light-mode .btn-add-to-cart {
+  background-color: #0284c7 !important;
+  color: #ffffff !important;
+}
+
+body.light-mode .btn-add-to-cart:hover {
+  background-color: #0369a1 !important;
+}
+
+/* NÚT PHÂN TRANG LIGHT MODE */
+body.light-mode .page-btn {
+  background-color: #ffffff !important;
+  color: #334155 !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+body.light-mode .page-btn:hover:not(:disabled) {
+  border-color: #0284c7 !important;
+  color: #0284c7 !important;
+}
+
+body.light-mode .page-btn.active {
+  background-color: #0284c7 !important;
+  color: #ffffff !important;
+  border-color: #0284c7 !important;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3) !important;
+}
+
+body.light-mode .toast-notification {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-left: 4px solid #0284c7 !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-mode .toast-text {
+  color: #0f172a !important;
 }

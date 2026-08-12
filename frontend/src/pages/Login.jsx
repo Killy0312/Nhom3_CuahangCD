@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import './Login.css';
-import Header from '../components/Header.jsx'; // ĐỒNG BỘ LUÔN HEADER DÙNG CHUNG
+import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.jsx'; 
 
 function Login({ setCurrentPage, cart = [] }) {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
 
-  // 💡 State quản lý Toast: Hỗ trợ thông báo nhiều trạng thái (Thành công / Thất bại)
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [toastTimer, setToastTimer] = useState(null);
 
@@ -15,7 +14,6 @@ function Login({ setCurrentPage, cart = [] }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // 💡 Hàm gọi thông báo nổi tùy biến theo loại
   const triggerToast = (msg, type = 'success') => {
     if (toastTimer) clearTimeout(toastTimer);
     setToast({ show: true, message: msg, type: type });
@@ -44,36 +42,37 @@ function Login({ setCurrentPage, cart = [] }) {
 
       if (response.ok) {
         if (isLogin) {
-          // Bắt chắc chắn tên từ Backend, dự phòng nếu trống thì lấy tên Phú
-          const userName = (data.user && data.user.name) ? data.user.name : "Phú";
-          localStorage.setItem('token', data.token || "token_tam_thoi"); 
-          localStorage.setItem('userName', userName); 
+          // Lưu token và thông tin role thực tế do MongoDB trả về
+          localStorage.setItem('token', data.token); 
+          localStorage.setItem('userName', data.user.name); 
+          localStorage.setItem('userRole', data.user.role);
 
-          // Hiện thông báo thành công xịn xò trước
-          triggerToast("🎉 Đăng nhập thành công! Đang chuyển hướng...", "success"); 
-
-          // Delay 1.5 giây cho người dùng nhìn thấy Toast rồi mới chuyển trang + reload
-          setTimeout(() => {
-            setCurrentPage('home'); 
-            window.location.reload();
-          }, 1500);
-
+          // Phân luồng điều hướng dựa trên role từ Database
+          if (data.user.role === 'admin') {
+            triggerToast("Chào mừng Quản trị viên truy cập Bảng điều khiển!", "success"); 
+            setTimeout(() => {
+              setCurrentPage('admin-dashboard'); 
+            }, 1200);
+          } else {
+            triggerToast("Đăng nhập thành công! Đang chuyển hướng...", "success"); 
+            setTimeout(() => {
+              setCurrentPage('home'); 
+            }, 1200);
+          }
         } else {
-          triggerToast("🎉 Đăng ký thành công! Vui lòng đăng nhập lại.", "success");
+          triggerToast("Đăng ký thành công! Vui lòng đăng nhập lại.", "success");
           setIsLogin(true); 
         }
       } else {
-        triggerToast(`❌ Lỗi: ${data.error || "Thông tin không hợp lệ"}`, "error");
+        triggerToast(`Lỗi: ${data.error || "Thông tin đăng nhập không hợp lệ"}`, "error");
       }
     } catch (error) {
-      triggerToast("❌ Không thể kết nối tới máy chủ Backend! Hãy kiểm tra cổng 5000.", "error");
+      triggerToast("Không thể kết nối tới máy chủ Backend! Hãy kiểm tra cổng 5000.", "error");
     }
   };
 
   return (
     <div className="app-container modern-theme">
-      
-      {/* Thay bằng Header dùng chung để Avatar đổi đồng bộ */}
       <Header setCurrentPage={setCurrentPage} cart={cart} />
 
       <main className="auth-main-content">
@@ -117,10 +116,8 @@ function Login({ setCurrentPage, cart = [] }) {
         </div>
       </main>
 
-      {/* 💡 CỤM TOAST NOTIFICATION THÔNG MINH CHO TRANG LOGIN */}
       <div className={`toast-notification ${toast.type} ${toast.show ? 'show' : ''}`}>
         <div className="toast-content">
-          <span className="toast-icon">{toast.type === 'success' ? '🎉' : '⚠️'}</span>
           <span className="toast-text">{toast.message}</span>
         </div>
         <div className="toast-progress-bar"></div>

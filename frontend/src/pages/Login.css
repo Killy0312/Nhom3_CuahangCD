@@ -175,9 +175,6 @@
 }
 
 /* Delay riêng cho trường hợp Đăng nhập thành công để kịp nhìn trước khi reload */
-.toast-notification.success.show {
-  /* Giữ animation chạy khớp luồng delay chuyển trang */
-}
 
 @keyframes toastProgress {
   from { transform: scaleX(1); }

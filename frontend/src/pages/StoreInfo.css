@@ -1,0 +1,392 @@
+/* ================= BỐ CỤC CHÍNH ================= */
+.store-info-main {
+  color: #ffffff;
+  padding-bottom: 80px;
+}
+
+.store-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.sub-title-accent {
+  color: #00e5ff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* ================= 1. HERO BANNER ================= */
+.store-hero-section {
+  position: relative;
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+  padding: 80px 20px 70px 20px;
+  text-align: center;
+  border-bottom: 1px solid #1e222a;
+  margin-bottom: 50px;
+  overflow: hidden;
+}
+
+.store-hero-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at center, rgba(0, 229, 255, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.store-hero-content {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  z-index: 2;
+}
+
+.store-badge {
+  display: inline-block;
+  background: rgba(0, 229, 255, 0.1);
+  color: #00e5ff;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+
+.store-hero-content h1 {
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: #ffffff;
+  margin-bottom: 16px;
+}
+
+.store-hero-content p {
+  color: #94a3b8;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* ================= 2. GRID SỨ MỆNH & VISUAL STATS ================= */
+.store-about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  margin-bottom: 80px;
+}
+
+.store-text-card {
+  text-align: left;
+}
+
+.store-text-card h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 16px;
+}
+
+.store-text-card p {
+  color: #cbd5e1;
+  font-size: 15px;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.highlight-quote {
+  border-left: 3px solid #00e5ff;
+  padding-left: 16px;
+  font-style: italic;
+  color: #00e5ff !important;
+  background: rgba(0, 229, 255, 0.03);
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 0 8px 8px 0;
+}
+
+/* HÌNH ẢNH CÓ OVERLAY THỐNG KÊ */
+.store-visual-stats-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #282d37;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.visual-img-wrapper {
+  position: relative;
+  height: 360px;
+}
+
+.visual-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.store-visual-stats-card:hover .visual-img-wrapper img {
+  transform: scale(1.05);
+}
+
+.img-dark-gradient {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, transparent 60%);
+}
+
+.stats-floating-overlay {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  background: rgba(20, 23, 28, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.stat-pill-item {
+  text-align: center;
+  flex: 1;
+}
+
+.stat-num {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  color: #00e5ff;
+}
+
+.stat-lbl {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+/* ================= 3. 4 GIÁ TRỊ CỐT LÕI ================= */
+.store-values-section {
+  margin-bottom: 80px;
+  text-align: center;
+}
+
+.section-title-box {
+  margin-bottom: 40px;
+}
+
+.section-title-center {
+  font-size: 28px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.value-card {
+  background: #14171c;
+  border: 1px solid #1e222a;
+  border-radius: 14px;
+  padding: 28px 20px;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.value-card:hover {
+  transform: translateY(-6px);
+  border-color: #00e5ff;
+  box-shadow: 0 10px 25px rgba(0, 229, 255, 0.12);
+}
+
+.value-icon-box {
+  width: 54px;
+  height: 54px;
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.value-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.value-card p {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.6;
+}
+
+/* ================= 4. SHOWROOM & LIÊN HỆ ================= */
+.store-showroom-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  background: #14171c;
+  border: 1px solid #1e222a;
+  border-radius: 16px;
+  padding: 40px;
+  text-align: left;
+  align-items: center;
+}
+
+.showroom-info-col h2 {
+  font-size: 26px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+
+.showroom-desc {
+  font-size: 14px;
+  color: #94a3b8;
+  margin-bottom: 25px;
+}
+
+.contact-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.contact-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.c-icon {
+  font-size: 18px;
+  background: #1e222a;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.contact-item strong {
+  display: block;
+  font-size: 13px;
+  color: #ffffff;
+}
+
+.contact-item p {
+  font-size: 13px;
+  color: #00e5ff;
+  margin-top: 2px;
+}
+
+.btn-explore-catalog {
+  background: #00e5ff;
+  color: #000000;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-explore-catalog:hover {
+  background: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
+}
+
+.gallery-main-frame {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #282d37;
+  height: 320px;
+}
+
+.gallery-main-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.frame-badge {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(6px);
+  color: #00e5ff;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ================= RESPONSIVE & LIGHT MODE ================= */
+@media (max-width: 900px) {
+  .store-about-grid,
+  .store-showroom-section {
+    grid-template-columns: 1fr;
+  }
+  .values-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .values-grid {
+    grid-template-columns: 1fr;
+  }
+  .stats-floating-overlay {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+body.light-mode .store-hero-section {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+  border-color: #cbd5e1 !important;
+}
+
+body.light-mode .store-hero-content h1,
+body.light-mode .store-text-card h2,
+body.light-mode .section-title-center,
+body.light-mode .value-card h3,
+body.light-mode .showroom-info-col h2,
+body.light-mode .contact-item strong {
+  color: #0f172a !important;
+}
+
+body.light-mode .value-card,
+body.light-mode .store-showroom-section {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-mode .contact-item p,
+body.light-mode .stat-num {
+  color: #0284c7 !important;
+}

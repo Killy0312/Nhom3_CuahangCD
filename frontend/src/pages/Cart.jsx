@@ -4,7 +4,10 @@ import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.jsx'; 
 
 function Cart({ setCurrentPage, cart, updateCartItem }) {
-  const parsePrice = (priceStr) => parseInt(priceStr.replace(/\D/g, '')) || 0;
+  const parsePrice = (priceStr) => {
+    if (typeof priceStr === 'number') return priceStr;
+    return parseInt(String(priceStr).replace(/\D/g, '')) || 0;
+  };
   
   const formatPrice = (num) => num.toLocaleString('vi-VN') + 'đ';
 
@@ -13,7 +16,6 @@ function Cart({ setCurrentPage, cart, updateCartItem }) {
   return (
     <div className="app-container modern-theme">
       
-      {/* THAY TOÀN BỘ KHỐI HEADER BẰNG DÒNG NÀY */}
       <Header setCurrentPage={setCurrentPage} cart={cart} />
 
       <main className="cart-main">
@@ -38,36 +40,41 @@ function Cart({ setCurrentPage, cart, updateCartItem }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {cart.map(item => (
-                    <tr key={item.id}>
-                      <td className="cart-product-cell">
-                        <img src={item.img} alt={item.name} className="cart-img" />
-                        <div>
-                          <strong>{item.name}</strong>
-                          <span className="cart-category">{item.category}</span>
-                        </div>
-                      </td>
-                      <td>{item.price}</td>
-                      <td>
-                        <div className="quantity-control">
-                          <button onClick={() => updateCartItem(item.id, item.quantity - 1)}>-</button>
-                          <input 
-                            type="number" 
-                            value={item.quantity} 
-                            onChange={(e) => updateCartItem(item.id, parseInt(e.target.value) || 1)}
-                            min="1"
-                          />
-                          <button onClick={() => updateCartItem(item.id, item.quantity + 1)}>+</button>
-                        </div>
-                      </td>
-                      <td className="accent-text font-bold">
-                        {formatPrice(parsePrice(item.price) * item.quantity)}
-                      </td>
-                      <td>
-                        <button className="btn-remove" onClick={() => updateCartItem(item.id, 0)}>🗑️</button>
-                      </td>
-                    </tr>
-                  ))}
+                  {cart.map(item => {
+                    // FIX LỖI: Lấy linh hoạt _id từ MongoDB hoặc id
+                    const itemId = item._id || item.id;
+
+                    return (
+                      <tr key={itemId}>
+                        <td className="cart-product-cell">
+                          <img src={item.img} alt={item.name} className="cart-img" />
+                          <div>
+                            <strong>{item.name}</strong>
+                            <span className="cart-category">{item.category}</span>
+                          </div>
+                        </td>
+                        <td>{item.price}</td>
+                        <td>
+                          <div className="quantity-control">
+                            <button onClick={() => updateCartItem(itemId, item.quantity - 1)}>-</button>
+                            <input 
+                              type="number" 
+                              value={item.quantity} 
+                              onChange={(e) => updateCartItem(itemId, parseInt(e.target.value) || 1)}
+                              min="1"
+                            />
+                            <button onClick={() => updateCartItem(itemId, item.quantity + 1)}>+</button>
+                          </div>
+                        </td>
+                        <td className="accent-text font-bold">
+                          {formatPrice(parsePrice(item.price) * item.quantity)}
+                        </td>
+                        <td>
+                          <button className="btn-remove" onClick={() => updateCartItem(itemId, 0)}>🗑️</button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
