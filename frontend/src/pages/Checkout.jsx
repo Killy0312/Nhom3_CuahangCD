@@ -14,7 +14,6 @@ function Checkout({ setCurrentPage, cart = [], clearCart }) {
 
   const [toast, setToast] = useState({ show: false, message: '' });
 
-  // TỰ ĐỘNG ĐỌC TẤT CẢ CÁC BIẾN PROFILE CÓ THỂ CÓ TỪ LOCALSTORAGE
   useEffect(() => {
     try {
       const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
@@ -61,45 +60,84 @@ function Checkout({ setCurrentPage, cart = [], clearCart }) {
     setTimeout(() => setToast({ show: false, message: '' }), 3000);
   };
 
-  const handlePlaceOrder = (e) => {
-  e.preventDefault();
+  // 🔥 HÀM XỬ LÝ ĐẶT HÀNG KÈM TỰ ĐỘNG TRỪ TỒN KHO TRÊN MONGODB
+  const handlePlaceOrder = async (e) => {
+    e.preventDefault();
 
-  if (!formData.fullName.trim() || !formData.phone.trim() || !formData.address.trim()) {
-    triggerToast("Vui lòng điền đầy đủ Họ tên, Số điện thoại và Địa chỉ giao hàng!");
-    return;
-  }
+    if (!formData.fullName.trim() || !formData.phone.trim() || !formData.address.trim()) {
+      triggerToast("Vui lòng điền đầy đủ Họ tên, Số điện thoại và Địa chỉ giao hàng!");
+      return;
+    }
 
-  // 👈 LẤY EMAIL CỦA TÀI KHOẢN ĐANG ĐĂNG NHẬP
-  const loggedInEmail = localStorage.getItem('userEmail') || '';
+    const orderCode = "HD" + Math.floor(100000 + Math.random() * 900000);
+    const loggedInEmail = localStorage.getItem('userEmail') || '';
 
-  const newOrder = {
-    orderId: "HD" + Math.floor(100000 + Math.random() * 900000),
-    userEmail: loggedInEmail, // 👈 GẮN EMAIL NGƯỜI MUA VÀO ĐƠN HÀNG
-    createdAt: new Date().toISOString(),
-    customerName: formData.fullName,
-    phone: formData.phone,
-    address: formData.address,
-    note: formData.note,
-    paymentMethod: formData.paymentMethod,
-    items: cart,
-    totalAmount: totalPrice,
-    status: 'Đã xác nhận'
+    const newOrder = {
+      orderId: orderCode,
+      userEmail: loggedInEmail,
+      createdAt: new Date().toISOString(),
+      customerName: formData.fullName,
+      phone: formData.phone,
+      address: formData.address,
+      note: formData.note,
+      paymentMethod: formData.paymentMethod,
+      items: cart,
+      totalAmount: totalPrice,
+      status: 'Đã xác nhận'
+    };
+
+    // 1. LƯU ĐƠN HÀNG VÀO LOCALSTORAGE
+    try {
+      const existingOrders = JSON.parse(localStorage.getItem('userOrders')) || [];
+      localStorage.setItem('userOrders', JSON.stringify([newOrder, ...existingOrders]));
+    } catch (err) {
+      console.error("Lỗi lưu đơn hàng vào LocalStorage:", err);
+    }
+
+    // 2. 🔥 TỰ ĐỘNG TRỪ TỒN KHO & BẮN LOG XUẤT KHO LÊN MONGODB FOR EACH ITEM IN CART
+    try {
+      for (const item of cart) {
+        const targetId = item._id || item.id;
+        const currentStock = Number(item.stock) || 30;
+        const buyQty = Number(item.quantity) || 1;
+        const newStock = Math.max(0, currentStock - buyQty); // Tránh âm kho
+
+        // a. Gọi API Cập nhật số lượng tồn mới lên CSDL MongoDB
+        if (targetId) {
+          await fetch(`http://localhost:5000/api/products/${targetId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...item, stock: newStock })
+          });
+        }
+
+        // b. Bắn Nhật ký Xuất kho (EXPORT) vào CSDL MongoDB
+        const logData = {
+          logId: "LOG_" + Date.now() + "_" + Math.floor(Math.random() * 1000),
+          date: new Date().toLocaleDateString('vi-VN') + ' ' + new Date().toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'}),
+          type: 'EXPORT',
+          productName: item.name,
+          quantity: buyQty,
+          note: `Khách hàng ${formData.fullName} đặt mua đơn #${orderCode}`
+        };
+
+        await fetch('http://localhost:5000/api/inventory-logs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(logData)
+        });
+      }
+    } catch (err) {
+      console.error("Lỗi đồng bộ trừ tồn kho MongoDB:", err);
+    }
+
+    triggerToast("Đặt hàng thành công! Đã tự động cập nhật kho hàng.");
+
+    setTimeout(() => {
+      clearCart();
+      setCurrentPage('order-history');
+    }, 1500);
   };
-
-  try {
-    const existingOrders = JSON.parse(localStorage.getItem('userOrders')) || [];
-    localStorage.setItem('userOrders', JSON.stringify([newOrder, ...existingOrders]));
-  } catch (err) {
-    console.error("Lỗi lưu đơn hàng:", err);
-  }
-
-  triggerToast("Đặt hàng thành công! Đang chuyển đến Lịch sử đơn...");
-
-  setTimeout(() => {
-    clearCart();
-    setCurrentPage('order-history');
-  }, 1500);
-};
 
   return (
     <div className="app-container modern-theme">
@@ -200,7 +238,7 @@ function Checkout({ setCurrentPage, cart = [], clearCart }) {
             </form>
           </div>
 
-          {/* CỘT PHẢI - TÓM TẮT ĐƠN HÀNG & NÚT XÁC NHẬN */}
+          {/* CỘT PHẢI - TÓM TẮT ĐƠN HÀNG */}
           <div className="checkout-summary-section">
             <h2 className="section-title">Đơn hàng của bạn</h2>
 

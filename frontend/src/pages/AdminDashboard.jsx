@@ -521,7 +521,7 @@ function AdminDashboard({ setCurrentPage, cart = [] }) {
                             <td><strong>{cust.orderCount} đơn</strong></td>
                             <td className="price-text">{formatPrice(cust.totalSpent)}</td>
                             <td>
-                              {/* 🔥 FIX PHÂN HẠNG VÀ CHỐNG VỠ KHUNG TEXT */}
+                              {/* FIX PHÂN HẠNG VÀ CHỐNG VỠ KHUNG TEXT */}
                               <span className={`tag-rank ${cust.totalSpent >= 15000000 ? 'diamond' : cust.totalSpent >= 2000000 ? 'vip' : 'normal'}`}>
                                 {cust.totalSpent >= 15000000 ? 'Kim Cương' : cust.totalSpent >= 2000000 ? 'Khách VIP 🌟' : 'Thành Viên'}
                               </span>

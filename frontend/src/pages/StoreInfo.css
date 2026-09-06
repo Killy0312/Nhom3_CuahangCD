@@ -365,9 +365,24 @@
   }
 }
 
+/* 🔥 TỐI ƯU TOÀN BỘ BẢNG MÀU CHẾ ĐỘ SÁNG (LIGHT MODE) - ĐẬM ĐẸP CHUẨN UX/UI */
+body.light-mode .store-info-main {
+  color: #0f172a !important;
+}
+
 body.light-mode .store-hero-section {
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
   border-color: #cbd5e1 !important;
+}
+
+body.light-mode .sub-title-accent {
+  color: #0284c7 !important;
+}
+
+body.light-mode .store-badge {
+  background: rgba(2, 132, 199, 0.1) !important;
+  color: #0284c7 !important;
+  border-color: rgba(2, 132, 199, 0.3) !important;
 }
 
 body.light-mode .store-hero-content h1,
@@ -379,6 +394,27 @@ body.light-mode .contact-item strong {
   color: #0f172a !important;
 }
 
+/* FIX ĐOẠN VĂN BANNER VÀ CÁC NỘI DUNG TẢ CHỮ MỜ */
+body.light-mode .store-hero-content p {
+  color: #475569 !important; /* Xám sẫm rõ nét */
+  font-weight: 500;
+}
+
+body.light-mode .store-text-card p,
+body.light-mode .value-card p,
+body.light-mode .showroom-desc {
+  color: #334155 !important; /* Đậm nét dễ đọc */
+}
+
+/* FIX KHUNG TRÍCH DẪN SỨ MỆNH HI-END */
+body.light-mode .highlight-quote {
+  color: #0369a1 !important;
+  background: rgba(2, 132, 199, 0.08) !important;
+  border-left-color: #0284c7 !important;
+  font-weight: 600;
+}
+
+/* FIX CARD THẺ GIÁ TRỊ VÀ SHOWROOM */
 body.light-mode .value-card,
 body.light-mode .store-showroom-section {
   background: #ffffff !important;
@@ -386,7 +422,49 @@ body.light-mode .store-showroom-section {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
 }
 
+body.light-mode .value-icon-box {
+  background: rgba(2, 132, 199, 0.08) !important;
+  border-color: rgba(2, 132, 199, 0.2) !important;
+}
+
 body.light-mode .contact-item p,
 body.light-mode .stat-num {
   color: #0284c7 !important;
+  font-weight: 700;
+}
+
+body.light-mode .contact-item strong {
+  color: #0f172a !important;
+}
+
+body.light-mode .c-icon {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1;
+}
+
+body.light-mode .stats-floating-overlay {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+body.light-mode .stat-lbl {
+  color: #64748b !important;
+}
+
+body.light-mode .btn-explore-catalog {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+}
+
+body.light-mode .btn-explore-catalog:hover {
+  background: #0369a1 !important;
+  box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3) !important;
+}
+
+body.light-mode .frame-badge {
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #0284c7 !important;
+  border-color: #cbd5e1 !important;
 }

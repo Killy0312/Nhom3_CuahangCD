@@ -131,6 +131,7 @@
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s;
+  font-family: inherit !important;
 }
 .btn-add-to-cart-large:hover {
   background-color: rgba(0, 229, 255, 0.05);
@@ -146,13 +147,14 @@
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s;
+  font-family: inherit !important;
 }
 .btn-buy-now:hover {
   background-color: #fff;
   transform: translateY(-2px);
 }
 
-/* ================= 🚀 KHU VỰC BỌC THANH SCROLL-BOX NỐT NHẠC ================= */
+/* ================= KHU VỰC BỌC THANH SCROLL-BOX NỐT NHẠC & THÔNG SỐ ================= */
 .tracklist-container {
   background-color: #14171c;
   border: 1px solid #1e222a;
@@ -175,14 +177,12 @@
 .th-title { flex: 1; text-align: left; }
 .th-time { width: 50px; text-align: right; }
 
-/* Cấu hình hộp cuộn độc lập cho list nhạc không tràn bờ đê */
 .tracklist-scroll-box {
-  max-height: 250px; /* Giới hạn độ cao đúng tầm 5-6 bài, còn lại phải cuộn */
-  overflow-y: auto;  /* Kích hoạt tự cuộn dọc */
+  max-height: 250px;
+  overflow-y: auto;
   padding-right: 4px;
 }
 
-/* Tinh chỉnh thanh cuộn siêu mảnh phong cách Spotify */
 .tracklist-scroll-box::-webkit-scrollbar {
   width: 4px;
 }
@@ -279,4 +279,103 @@
     position: relative;
     top: 0;
   }
+}
+
+/* ================= 🔥 TỐI ƯU TOÀN BỘ LIGHT MODE CHO TRANG CHI TIẾT SẢN PHẨM ================= */
+body.light-mode .btn-back {
+  color: #0284c7 !important;
+}
+
+body.light-mode .detail-title {
+  color: #0f172a !important; /* Đổi tên sản phẩm sang màu đen xẫm nổi bật */
+}
+
+body.light-mode .detail-artist {
+  color: #475569 !important; /* Đổi tên ca sĩ/hãng sang xám đậm */
+  font-weight: 600;
+}
+
+body.light-mode .detail-description {
+  color: #334155 !important; /* Đổi mô tả sang xám sẫm nét căng */
+}
+
+body.light-mode .detail-category {
+  background-color: rgba(2, 132, 199, 0.1) !important;
+  color: #0284c7 !important;
+}
+
+body.light-mode .detail-genre-tag {
+  background-color: #f1f5f9 !important;
+  color: #475569 !important;
+  border-color: #cbd5e1 !important;
+}
+
+body.light-mode .detail-price-box {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-mode .detail-price {
+  color: #0284c7 !important; /* Giá tiền xanh biển đẹp */
+}
+
+body.light-mode .detail-status {
+  color: #64748b !important;
+}
+
+/* NÚT BẤM CHẾ ĐỘ SÁNG */
+body.light-mode .btn-add-to-cart-large {
+  color: #0284c7 !important;
+  border-color: #0284c7 !important;
+}
+
+body.light-mode .btn-add-to-cart-large:hover {
+  background-color: rgba(2, 132, 199, 0.08) !important;
+}
+
+body.light-mode .btn-buy-now {
+  background-color: #0284c7 !important;
+  color: #ffffff !important;
+}
+
+body.light-mode .btn-buy-now:hover {
+  background-color: #0369a1 !important;
+  box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3) !important;
+}
+
+/* BẢNG THÔNG SỐ KỸ THUẬT VÀ BÀI HÁT TRONG LIGHT MODE */
+body.light-mode .tracklist-container {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-mode .tracklist-header {
+  background-color: #f8fafc !important;
+  border-bottom-color: #cbd5e1 !important;
+  color: #475569 !important;
+}
+
+body.light-mode .track-item {
+  border-bottom-color: #f1f5f9 !important;
+}
+
+body.light-mode .track-item:hover {
+  background-color: #f8fafc !important;
+}
+
+body.light-mode .track-name,
+body.light-mode .spec-value {
+  color: #0f172a !important; /* Chữ hiển thị thông số đen rõ nét */
+  font-weight: 500;
+}
+
+body.light-mode .spec-label {
+  color: #475569 !important;
+}
+
+body.light-mode .detail-main-img {
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
 }
